@@ -234,10 +234,6 @@ export default function RegisterForm({
         <textarea rows={3} value={additionalNote} onChange={(e) => setAdditionalNote(e.target.value)} className="input-glass" />
       </div>
 
-      <p className="text-xs text-ink/60">
-        For security and to prevent misuse, we record your IP address and browser with your registration. Only the organizers can see it.
-      </p>
-
       <button type="submit" disabled={submitting} className="btn btn-primary w-full">
         {submitting ? "Submitting…" : "Confirm registration"}
       </button>
