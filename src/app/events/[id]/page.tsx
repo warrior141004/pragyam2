@@ -145,6 +145,11 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                 </div>
               )}
             </div>
+
+            <div className="hairline my-6" />
+            <Link href={`/manage/${event._id}`} className="block text-center text-sm font-semibold text-orange underline underline-offset-4">
+              Hosting this event? Manage it
+            </Link>
           </div>
         </aside>
       </div>

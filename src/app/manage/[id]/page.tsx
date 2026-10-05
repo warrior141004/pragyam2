@@ -50,14 +50,14 @@ export default function ManagePage() {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
-  // Take the key from the emailed link, keep it for this tab only, and remove it from the address bar.
+  // Take the key from the emailed link, remember it in this browser, and remove it from the address bar.
   useEffect(() => {
     const storeKey = `pragyam_manage_${id}`;
     const fromUrl = new URLSearchParams(window.location.search).get("key");
     let k: string | null = null;
     try {
-      if (fromUrl) sessionStorage.setItem(storeKey, fromUrl);
-      k = fromUrl || sessionStorage.getItem(storeKey);
+      if (fromUrl) localStorage.setItem(storeKey, fromUrl);
+      k = fromUrl || localStorage.getItem(storeKey);
     } catch {
       k = fromUrl;
     }
@@ -71,6 +71,9 @@ export default function ManagePage() {
     if (!key) return;
     const res = await fetch(`/api/host/events/${id}`, { headers: { "x-manage-key": key }, cache: "no-store" });
     if (!res.ok) {
+      try {
+        localStorage.removeItem(`pragyam_manage_${id}`);
+      } catch {}
       setState("denied");
       return;
     }
@@ -85,6 +88,19 @@ export default function ManagePage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch once the key is known
     load();
   }, [load]);
+
+  const [pasted, setPasted] = useState("");
+
+  function submitKey(e: React.FormEvent) {
+    e.preventDefault();
+    const k = pasted.trim();
+    if (!k) return;
+    try {
+      localStorage.setItem(`pragyam_manage_${id}`, k);
+    } catch {}
+    setState("loading");
+    setKey(k);
+  }
 
   function set<K extends keyof HostEvent>(field: K, value: HostEvent[K]) {
     setForm((f) => (f ? { ...f, [field]: value } : f));
@@ -155,7 +171,12 @@ export default function ManagePage() {
             Only the host can open this page, using the private link emailed when the event was submitted. If you lost it,
             contact the organizers to have a new one sent.
           </p>
-          <Link href="/" className="btn btn-glass mt-6">Back home</Link>
+          <form onSubmit={submitKey} className="mt-6 space-y-3 text-left">
+            <label className={lbl}>Paste your manage key</label>
+            <input className="input-glass" value={pasted} onChange={(e) => setPasted(e.target.value)} placeholder="Key from your approval email" autoComplete="off" />
+            <button type="submit" className="btn btn-primary w-full">Open manager</button>
+          </form>
+          <Link href={`/events/${id}`} className="btn btn-glass mt-4">Back to event</Link>
         </div>
       </div>
     );
