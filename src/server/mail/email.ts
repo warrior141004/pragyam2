@@ -96,6 +96,31 @@ const row = (label: string, value: string) =>
 
 const eventUrl = (id: string) => `${esc(siteUrl)}/events/${esc(id)}`;
 
+const bullet = (title: string, text: string) =>
+  `<li style="margin:0 0 10px;color:${C.muted};"><strong style="color:#ffffff;">${title}</strong> ${text}</li>`;
+
+/** What the manage page can do. Shared by the approval email and the resent-link email. */
+const manageGuide = () =>
+  `<ul style="margin:0 0 14px;padding-left:20px;font-size:14px;line-height:1.6;">` +
+  bullet("Edit event details:", "title, description, rules, date, time, duration, venue requirements and maximum participants.") +
+  bullet(
+    "Set the team size:",
+    "choose a minimum and maximum team size. For a solo event keep the maximum at 1. For a team event set the range, for example 2 to 4 members. Team size includes the participant who registers."
+  ) +
+  bullet(
+    "Add your own registration questions:",
+    "ask participants anything you need, for example &quot;What is your in-game ID?&quot;, &quot;T-shirt size?&quot; or &quot;Which language will you code in?&quot;. Use short or long answers, numbers, dropdowns, checkboxes, Yes/No or links, and mark any question as required. Participants answer these while registering."
+  ) +
+  bullet(
+    "See and manage participants:",
+    "view everyone who registered with their enrollment number, department, year, team and answers. You can remove a participant and download the list as a CSV."
+  ) +
+  bullet("Open or close registrations:", "whenever you like.") +
+  `</ul>` +
+  p(
+    `${strong("Tip:")} every participant already gives their name, email, phone, enrollment number, department and year. Set your team size and questions ${strong("before")} you share the event, so people see them from the first registration.`
+  );
+
 const manageUrl = (id: string, key: string) => `${esc(siteUrl)}/manage/${esc(id)}?key=${esc(key)}`;
 
 export async function sendProposalReceivedEmail(opts: { to: string; hostName: string; eventTitle: string }) {
@@ -119,8 +144,12 @@ export async function sendProposalApprovedEmail(opts: {
     p(`Hi ${esc(opts.proposerName)},`) +
       p(`Congratulations! Your event proposal ${strong(esc(opts.eventTitle))} has been approved for Pragyam 2.0 and is now live on the website.`) +
       button(eventUrl(opts.eventId), "View your event") +
-      p(`${strong("Manage your event")}: use this private link to edit your event's details and manage participants. Keep it to yourself, because anyone with it can edit the event and see participants.`) +
+      `<div style="height:1px;background:${C.border};margin:22px 0 18px;line-height:1px;font-size:0;">&nbsp;</div>` +
+      `<h2 style="margin:0 0 10px;font-size:17px;color:#ffffff;">Manage your event</h2>` +
+      p("Use your private manage link to edit your event and manage participants. You can do all of this from one page:") +
+      manageGuide() +
       button(manageUrl(opts.eventId, opts.manageKey), "Manage your event") +
+      p(`<span style="display:block;margin-top:14px;">Keep this link private. Anyone who has it can edit your event and see its participants. If you lose it, contact the organizers and we'll send you a new one.</span>`) +
       p(`<span style="display:block;margin-top:18px;">Thank you for contributing to Pragyam 2.0.</span>`)
   );
   return send(opts.to, "Your Pragyam 2.0 Event Has Been Approved!", html);
@@ -221,9 +250,10 @@ export async function sendManageLinkEmail(opts: {
   const html = wrapper(
     "Your event management link",
     p(`Hi ${esc(opts.hostName)},`) +
-      p(`Use the private link below to edit ${strong(esc(opts.eventTitle))} and manage its participants.`) +
+      p(`Here is your private link to manage ${strong(esc(opts.eventTitle))}. Any earlier manage link no longer works. From this page you can:`) +
+      manageGuide() +
       button(href, "Manage your event") +
-      p(`<span style="display:block;margin-top:18px;">Keep this link private: anyone who has it can edit your event and see its participants.</span>`)
+      p(`<span style="display:block;margin-top:14px;">Keep this link private. Anyone who has it can edit your event and see its participants.</span>`)
   );
   return send(opts.to, `Manage your Pragyam 2.0 event: ${opts.eventTitle}`, html);
 }
