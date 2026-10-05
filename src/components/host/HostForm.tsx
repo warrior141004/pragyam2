@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const CATEGORIES = [
   "Technical",
@@ -104,9 +105,9 @@ export default function HostForm({ onDone }: { onDone: () => void }) {
             <p className="mt-2 text-sm text-ink/70">
               You can still register for any approved event — solo or with a team — and be part of the fest.
             </p>
-            <a href="/events" className="btn btn-primary btn-sm mt-4">
+            <Link href="/events" className="btn btn-primary btn-sm mt-4">
               Browse events
-            </a>
+            </Link>
           </div>
         )}
       </div>

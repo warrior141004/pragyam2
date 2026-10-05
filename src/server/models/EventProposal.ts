@@ -35,6 +35,7 @@ export interface IEventProposal {
   rejectionReason: string;
   venue: string;
   registrationsClosed: boolean;
+  manageKeyHash: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,6 +65,8 @@ const EventProposalSchema = new Schema<IEventProposal>(
     rejectionReason: { type: String, default: "" },
     venue: { type: String, default: "" },
     registrationsClosed: { type: Boolean, default: false },
+    // SHA-256 of the host's private manage key; never returned by default.
+    manageKeyHash: { type: String, default: "", select: false },
   },
   { timestamps: true }
 );

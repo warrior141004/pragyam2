@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/server/db/connect";
 import EventProposal, { CATEGORIES } from "@/server/models/EventProposal";
 import Registration from "@/server/models/Registration";
+import { sendProposalReceivedEmail } from "@/server/mail/email";
 
 // GET /api/events -> list approved events (with search/category filter)
 export async function GET(req: NextRequest) {
@@ -108,6 +109,13 @@ export async function POST(req: NextRequest) {
     preferredDate: body.preferredDate || "",
     preferredTime: body.preferredTime || "",
     additionalInfo: body.additionalInfo || "",
+  });
+
+  // No manage key yet: it is issued only when an admin approves the proposal.
+  await sendProposalReceivedEmail({
+    to: proposal.proposerEmail,
+    hostName: proposal.proposerName,
+    eventTitle: proposal.title,
   });
 
   return NextResponse.json({ id: String(proposal._id) }, { status: 201 });

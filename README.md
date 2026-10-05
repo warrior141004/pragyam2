@@ -1,6 +1,6 @@
 # Pragyam 2.0
 
-Event management portal for Pragyam 2.0, the Department of Computer Science fest at Central University of Rajasthan. Built with Next.js (App Router), React, Tailwind CSS, MongoDB (Mongoose) and Resend.
+Event management portal for Pragyam 2.0, the Department of Computer Science fest at Central University of Rajasthan. Built with Next.js (App Router), React, Tailwind CSS, MongoDB (Mongoose) and Brevo (email).
 
 Hosts propose events, admins approve or reject them, and participants register for approved events.
 
@@ -19,7 +19,7 @@ Open http://localhost:3000.
 | Variable | Purpose |
 | --- | --- |
 | `MONGODB_URI` | MongoDB Atlas connection string |
-| `RESEND_API_KEY` | Resend API key for emails |
+| `BREVO_API_KEY` | Brevo API key for emails |
 | `EMAIL_FROM` | Verified sender address |
 | `ADMIN_SECRET` | Password for the admin dashboard |
 | `NEXT_PUBLIC_SITE_URL` | Public site URL, used in emails |

@@ -8,7 +8,7 @@ import PageHeader from "@/components/shared/PageHeader";
 const NOTES = [
   { title: "Review in days, not weeks", desc: "Organizers look at every proposal and reply by email." },
   { title: "You own the event", desc: "Registrations go straight to your inbox as they arrive." },
-  { title: "Change details later", desc: "Venue, timing and capacity can be adjusted after approval." },
+  { title: "Edit and manage anytime", desc: "After approval, a private link in your email lets only you edit the event and manage its participants." },
 ];
 
 export default function HostPage() {
@@ -39,8 +39,7 @@ export default function HostPage() {
                 Proposal <span className="font-display text-teal">received.</span>
               </p>
               <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-ink/70">
-                It&apos;s with the Pragyam 2.0 team now. We&apos;ll email you the moment it&apos;s approved, with a
-                link to your live event page.
+                It&apos;s with the Pragyam 2.0 team now. Once it&apos;s approved we&apos;ll email you a private manage link: it&apos;s the only way to edit your event and manage participants, so keep it safe.
               </p>
               <Link href="/events" className="btn btn-glass mt-8">
                 Explore approved events

@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import { connectDB } from "@/server/db/connect";
 import { isAdminRequest } from "@/server/auth/adminAuth";
 import EventProposal from "@/server/models/EventProposal";
-import { sendProposalApprovedEmail, sendProposalRejectedEmail } from "@/server/mail/email";
+import { sendManageLinkEmail, sendProposalApprovedEmail, sendProposalRejectedEmail } from "@/server/mail/email";
+import { newManageKey } from "@/server/auth/hostAuth";
 
 export async function PATCH(
   req: NextRequest,
@@ -29,6 +30,9 @@ export async function PATCH(
   if (action === "approve") {
     proposal.status = "APPROVED";
     proposal.rejectionReason = "";
+    // The host's manage key is issued here, on approval, and emailed with the approval notice.
+    const { key, hash } = newManageKey();
+    proposal.manageKeyHash = hash;
     await proposal.save();
     // Status is persisted first; email failure must not roll it back.
     await sendProposalApprovedEmail({
@@ -36,6 +40,22 @@ export async function PATCH(
       proposerName: proposal.proposerName,
       eventTitle: proposal.title,
       eventId: String(proposal._id),
+      manageKey: key,
+    });
+  } else if (action === "resend-manage-link") {
+    if (proposal.status !== "APPROVED") {
+      return NextResponse.json({ error: "Only approved events have a manage link" }, { status: 400 });
+    }
+    // Issues a new key (the old link stops working) and emails it to the host.
+    const { key, hash } = newManageKey();
+    proposal.manageKeyHash = hash;
+    await proposal.save();
+    await sendManageLinkEmail({
+      to: proposal.proposerEmail,
+      hostName: proposal.proposerName,
+      eventTitle: proposal.title,
+      eventId: String(proposal._id),
+      manageKey: key,
     });
   } else if (action === "reject") {
     proposal.status = "REJECTED";
@@ -67,7 +87,9 @@ export async function PATCH(
     await proposal.save();
   }
 
-  return NextResponse.json({ ok: true, proposal });
+  const { manageKeyHash: _omit, ...safe } = proposal.toObject();
+  void _omit;
+  return NextResponse.json({ ok: true, proposal: safe });
 }
 
 export async function DELETE(

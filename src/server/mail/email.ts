@@ -96,17 +96,31 @@ const row = (label: string, value: string) =>
 
 const eventUrl = (id: string) => `${esc(siteUrl)}/events/${esc(id)}`;
 
+const manageUrl = (id: string, key: string) => `${esc(siteUrl)}/manage/${esc(id)}?key=${esc(key)}`;
+
+export async function sendProposalReceivedEmail(opts: { to: string; hostName: string; eventTitle: string }) {
+  const html = wrapper(
+    "Proposal received",
+    p(`Hi ${esc(opts.hostName)},`) +
+      p(`We've received your proposal ${strong(esc(opts.eventTitle))} for Pragyam 2.0. The organizers will review it, and once it's approved you'll get an email with a private link to edit your event and manage its participants.`)
+  );
+  return send(opts.to, "We received your Pragyam 2.0 event proposal", html);
+}
+
 export async function sendProposalApprovedEmail(opts: {
   to: string;
   proposerName: string;
   eventTitle: string;
   eventId: string;
+  manageKey: string;
 }) {
   const html = wrapper(
     "Your event is approved 🎉",
     p(`Hi ${esc(opts.proposerName)},`) +
       p(`Congratulations! Your event proposal ${strong(esc(opts.eventTitle))} has been approved for Pragyam 2.0 and is now live on the website.`) +
       button(eventUrl(opts.eventId), "View your event") +
+      p(`${strong("Manage your event")}: use this private link to edit your event's details and manage participants. Keep it to yourself, because anyone with it can edit the event and see participants.`) +
+      button(manageUrl(opts.eventId, opts.manageKey), "Manage your event") +
       p(`<span style="display:block;margin-top:18px;">Thank you for contributing to Pragyam 2.0.</span>`)
   );
   return send(opts.to, "Your Pragyam 2.0 Event Has Been Approved!", html);
@@ -183,4 +197,23 @@ export async function sendRegistrationConfirmationEmail(opts: {
       p(`<span style="display:block;margin-top:18px;">See you at Pragyam 2.0!</span>`)
   );
   return send(opts.to, `Registration confirmed: ${opts.eventTitle}`, html);
+}
+
+/** Sent when an admin resends it. The link is the host's only credential for editing the event. */
+export async function sendManageLinkEmail(opts: {
+  to: string;
+  hostName: string;
+  eventTitle: string;
+  eventId: string;
+  manageKey: string;
+}) {
+  const href = manageUrl(opts.eventId, opts.manageKey);
+  const html = wrapper(
+    "Your event management link",
+    p(`Hi ${esc(opts.hostName)},`) +
+      p(`Use the private link below to edit ${strong(esc(opts.eventTitle))} and manage its participants.`) +
+      button(href, "Manage your event") +
+      p(`<span style="display:block;margin-top:18px;">Keep this link private: anyone who has it can edit your event and see its participants.</span>`)
+  );
+  return send(opts.to, `Manage your Pragyam 2.0 event: ${opts.eventTitle}`, html);
 }

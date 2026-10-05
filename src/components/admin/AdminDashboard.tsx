@@ -410,6 +410,16 @@ function ManageEventsPanel() {
     await load();
   }
 
+  async function resendManageLink(id: string) {
+    if (!window.confirm("Email the host a new manage link? Their previous link will stop working.")) return;
+    const res = await fetch(`/api/admin/proposals/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "resend-manage-link" }),
+    });
+    window.alert(res.ok ? "New manage link emailed to the host." : "Could not resend the link.");
+  }
+
   async function remove(id: string) {
     if (!window.confirm("Delete/cancel this event? This cannot be undone.")) return;
     await fetch(`/api/admin/proposals/${id}`, { method: "DELETE" });
@@ -441,6 +451,9 @@ function ManageEventsPanel() {
                   className="btn btn-glass btn-sm"
                 >
                   {editing === e._id ? "Cancel" : "Edit"}
+                </button>
+                <button onClick={() => resendManageLink(e._id)} className="btn btn-glass btn-sm">
+                  Resend manage link
                 </button>
                 <button onClick={() => remove(e._id)} className="btn btn-danger btn-sm">
                   Delete
