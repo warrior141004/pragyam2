@@ -124,6 +124,10 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     updates.teamMaxSize = max;
   }
 
+  if ("showContact" in body) {
+    updates.showContact = Boolean(body.showContact);
+  }
+
   if ("registrationsClosed" in body) {
     updates.registrationsClosed = Boolean(body.registrationsClosed);
   }

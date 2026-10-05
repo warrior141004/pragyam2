@@ -135,6 +135,9 @@ export default function HostForm({ onDone }: { onDone: () => void }) {
           </Field>
           <Field label="Phone number">
             <input required type="tel" className="input-glass" value={form.proposerPhone} onChange={(e) => update("proposerPhone", e.target.value)} />
+            <p className="mt-1.5 text-xs text-ink/60">
+              Once your event is approved, your name and phone number appear on the public Contact page so participants can reach you. You can hide them later from your manage link.
+            </p>
           </Field>
         </div>
       </Section>

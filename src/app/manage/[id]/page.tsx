@@ -27,6 +27,7 @@ interface HostEvent {
   preferredTime: string;
   additionalInfo: string;
   registrationsClosed: boolean;
+  showContact: boolean;
   registrationQuestions: RegistrationQuestion[];
   teamMinSize: number;
   teamMaxSize: number;
@@ -87,7 +88,7 @@ export default function ManagePage() {
       return;
     }
     const data = await res.json();
-    const ev = { ...data.event, registrationQuestions: data.event.registrationQuestions ?? [], teamMinSize: data.event.teamMinSize ?? 1, teamMaxSize: data.event.teamMaxSize ?? 1 };
+    const ev = { ...data.event, showContact: data.event.showContact !== false, registrationQuestions: data.event.registrationQuestions ?? [], teamMinSize: data.event.teamMinSize ?? 1, teamMaxSize: data.event.teamMaxSize ?? 1 };
     setEvent(ev);
     setForm(ev);
     setPeople(data.registrations);
@@ -143,11 +144,11 @@ export default function ManagePage() {
     if (!form || !key) return;
     setSaving(true);
     setMsg(null);
-    const { proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants, maxParticipants, duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed, registrationQuestions, teamMinSize, teamMaxSize } = form;
+    const { proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants, maxParticipants, duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed, showContact, registrationQuestions, teamMinSize, teamMaxSize } = form;
     const res = await fetch(`/api/host/events/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json", "x-manage-key": key },
-      body: JSON.stringify({ proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants: Number(expectedParticipants), maxParticipants: Number(maxParticipants), duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed, registrationQuestions, teamMinSize: Number(teamMinSize), teamMaxSize: Number(teamMaxSize) }),
+      body: JSON.stringify({ proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants: Number(expectedParticipants), maxParticipants: Number(maxParticipants), duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed, showContact, registrationQuestions, teamMinSize: Number(teamMinSize), teamMaxSize: Number(teamMaxSize) }),
     });
     const data = await res.json().catch(() => ({}));
     setSaving(false);
@@ -369,6 +370,11 @@ export default function ManagePage() {
         </div>
 
         <label className="flex items-center gap-3 pt-2 text-sm text-ink/80">
+          <input type="checkbox" checked={form.showContact} onChange={(e) => set("showContact", e.target.checked)} />
+          Show my name and phone number on the public Contact page
+        </label>
+
+        <label className="flex items-center gap-3 text-sm text-ink/80">
           <input type="checkbox" checked={form.registrationsClosed} onChange={(e) => set("registrationsClosed", e.target.checked)} />
           Close registrations
         </label>

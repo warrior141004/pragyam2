@@ -8,6 +8,7 @@ const EXPLORE = [
   { href: "/", label: "Home" },
   { href: "/events", label: "Events" },
   { href: "/about", label: "About the fest" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const TAKE_PART = [

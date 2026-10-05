@@ -10,6 +10,7 @@ const ITEMS = [
   { label: "About", href: "/about" },
   { label: "Events", href: "/events" },
   { label: "Check Status", href: "/status" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {

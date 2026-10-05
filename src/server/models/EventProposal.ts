@@ -36,6 +36,8 @@ export interface IEventProposal {
   rejectionReason: string;
   venue: string;
   registrationsClosed: boolean;
+  /** Show the host's name and phone on the public Contact page. */
+  showContact: boolean;
   manageKeyHash: string;
   registrationQuestions: RegistrationQuestion[];
   /** Team size includes the registrant. Max 1 means an individual event. */
@@ -81,6 +83,7 @@ const EventProposalSchema = new Schema<IEventProposal>(
     rejectionReason: { type: String, default: "" },
     venue: { type: String, default: "" },
     registrationsClosed: { type: Boolean, default: false },
+    showContact: { type: Boolean, default: true },
     registrationQuestions: { type: [QuestionSchema], default: [] },
     teamMinSize: { type: Number, default: 1, min: 1 },
     teamMaxSize: { type: Number, default: 1, min: 1 },
