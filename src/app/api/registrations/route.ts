@@ -10,6 +10,12 @@ import { ENROLLMENT_RE, YEARS, type RegistrationQuestion } from "@/config/regist
 const bad = (error: string, status = 400) => NextResponse.json({ error }, { status });
 const clean = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
 
+/** Client IP as set by the hosting proxy (Vercel puts the real address first in x-forwarded-for). */
+function clientIp(req: NextRequest) {
+  const fwd = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  return (fwd || req.headers.get("x-real-ip") || "").slice(0, 64);
+}
+
 export async function POST(req: NextRequest) {
   await connectDB();
 
@@ -90,6 +96,8 @@ export async function POST(req: NextRequest) {
       department,
       year,
       teamName,
+      ip: clientIp(req),
+      userAgent: clean(req.headers.get("user-agent"), 300),
       answers,
       teamRequired,
       teamMembers,

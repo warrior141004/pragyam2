@@ -33,6 +33,13 @@ interface Registration {
   participantName: string;
   participantEmail: string;
   participantPhone: string;
+  enrollmentNo?: string;
+  department?: string;
+  year?: string;
+  teamName?: string;
+  answers?: { questionId: string; label: string; value: string }[];
+  ip?: string;
+  userAgent?: string;
   teamRequired: boolean;
   teamMembers: { name: string; enrollmentNo: string }[];
   additionalNote: string;
@@ -345,6 +352,17 @@ function RegistrationsPanel() {
                 <div className={detailGrid}>
                   <p><span className={k}>Email:</span> {r.participantEmail}</p>
                   <p><span className={k}>Phone:</span> {r.participantPhone}</p>
+                  {(r.enrollmentNo || r.department || r.year) && (
+                    <p className="sm:col-span-2">
+                      <span className={k}>Student:</span> {[r.enrollmentNo, r.department, r.year].filter(Boolean).join(" · ")}
+                    </p>
+                  )}
+                  {r.teamName && <p className="sm:col-span-2"><span className={k}>Team name:</span> {r.teamName}</p>}
+                  {(r.answers ?? []).map((a) => (
+                    <p key={a.questionId} className="sm:col-span-2"><span className={k}>{a.label}:</span> {a.value}</p>
+                  ))}
+                  <p><span className={k}>IP address:</span> {r.ip || "not recorded"}</p>
+                  <p className="break-all sm:col-span-2"><span className={k}>Browser:</span> {r.userAgent || "not recorded"}</p>
                   {r.teamRequired && r.teamMembers.length > 0 && (
                     <div className="sm:col-span-2">
                       <span className={k}>Team:</span>{" "}

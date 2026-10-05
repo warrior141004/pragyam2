@@ -16,6 +16,8 @@ export interface IRegistration {
   department?: string;
   year?: string;
   teamName?: string;
+  ip?: string;
+  userAgent?: string;
   answers: RegistrationAnswer[];
   teamRequired: boolean;
   teamMembers: ITeamMember[];
@@ -35,6 +37,9 @@ const RegistrationSchema = new Schema<IRegistration>(
     department: { type: String, trim: true },
     year: { type: String, trim: true },
     teamName: { type: String, trim: true },
+    // Abuse tracing: admin-only. select:false keeps these out of every query unless asked for.
+    ip: { type: String, select: false },
+    userAgent: { type: String, select: false },
     answers: {
       type: [{ _id: false, questionId: String, label: String, value: String }],
       default: [],

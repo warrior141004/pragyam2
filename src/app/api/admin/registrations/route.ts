@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
   if (eventId) query.event = eventId;
 
   const registrations = await Registration.find(query)
+    .select("+ip +userAgent")
     .populate("event", "title maxParticipants")
     .sort({ createdAt: -1 })
     .lean();
