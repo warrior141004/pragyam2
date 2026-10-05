@@ -41,6 +41,9 @@ export async function GET(req: NextRequest) {
     preferredDate: e.preferredDate,
     preferredTime: e.preferredTime,
     registrationsClosed: e.registrationsClosed,
+    registrationQuestions: e.registrationQuestions ?? [],
+    teamMinSize: e.teamMinSize ?? 1,
+    teamMaxSize: e.teamMaxSize ?? 1,
     status: e.status,
     createdAt: e.createdAt,
   }));

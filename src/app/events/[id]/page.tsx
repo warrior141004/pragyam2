@@ -141,7 +141,13 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       Cancel
                     </button>
                   </div>
-                  <RegisterForm eventId={event._id} onDone={() => setDone(true)} />
+                  <RegisterForm
+                    eventId={event._id}
+                    questions={event.registrationQuestions}
+                    teamMinSize={event.teamMinSize}
+                    teamMaxSize={event.teamMaxSize}
+                    onDone={() => setDone(true)}
+                  />
                 </div>
               )}
             </div>

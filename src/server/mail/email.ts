@@ -155,6 +155,7 @@ export async function sendNewRegistrationEmailToHost(opts: {
   participantPhone: string;
   teamMembers: { name: string; enrollmentNo: string }[];
   additionalNote?: string;
+  details?: { label: string; value: string }[];
   registeredCount: number;
   maxParticipants: number;
 }) {
@@ -171,6 +172,7 @@ export async function sendNewRegistrationEmailToHost(opts: {
         ${row("Name", esc(opts.participantName))}
         ${row("Email", esc(opts.participantEmail))}
         ${row("Phone", esc(opts.participantPhone))}
+        ${(opts.details ?? []).map((d) => row(esc(d.label), esc(d.value))).join("")}
         ${teamRows}
         ${opts.additionalNote ? row("Note", esc(opts.additionalNote)) : ""}
       </table>` +
@@ -188,11 +190,19 @@ export async function sendRegistrationConfirmationEmail(opts: {
   participantName: string;
   eventTitle: string;
   eventId: string;
+  details?: { label: string; value: string }[];
 }) {
+  const summary = opts.details?.length
+    ? p(`Here's what you submitted:`) +
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 14px;">${opts.details
+        .map((d) => row(esc(d.label), esc(d.value)))
+        .join("")}</table>`
+    : "";
   const html = wrapper(
     "You're registered! ⚡",
     p(`Hi ${esc(opts.participantName)},`) +
       p(`Your registration for ${strong(esc(opts.eventTitle))} at Pragyam 2.0 is confirmed.`) +
+      summary +
       button(eventUrl(opts.eventId), "View event details") +
       p(`<span style="display:block;margin-top:18px;">See you at Pragyam 2.0!</span>`)
   );

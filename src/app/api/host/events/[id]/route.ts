@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { authorizeHost } from "@/server/auth/hostAuth";
 import { CATEGORIES } from "@/server/models/EventProposal";
 import Registration from "@/server/models/Registration";
+import { validateQuestions } from "@/server/registration/validate";
+import { LIMITS } from "@/config/registration";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -101,6 +103,25 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
       );
     }
     updates.maxParticipants = n;
+  }
+
+  if ("registrationQuestions" in body) {
+    const checked = validateQuestions(body.registrationQuestions);
+    if (checked.error) return NextResponse.json({ error: checked.error }, { status: 400 });
+    updates.registrationQuestions = checked.value;
+  }
+
+  if ("teamMinSize" in body || "teamMaxSize" in body) {
+    const min = Number("teamMinSize" in body ? body.teamMinSize : event.teamMinSize ?? 1);
+    const max = Number("teamMaxSize" in body ? body.teamMaxSize : event.teamMaxSize ?? 1);
+    if (!Number.isInteger(min) || !Number.isInteger(max) || min < 1 || max < min || max > LIMITS.maxTeam) {
+      return NextResponse.json(
+        { error: `Team size must be whole numbers with 1 ≤ min ≤ max ≤ ${LIMITS.maxTeam}` },
+        { status: 400 }
+      );
+    }
+    updates.teamMinSize = min;
+    updates.teamMaxSize = max;
   }
 
   if ("registrationsClosed" in body) {

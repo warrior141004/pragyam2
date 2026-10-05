@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { QUESTION_TYPES, QUESTION_TYPE_LABELS, LIMITS, type QuestionType, type RegistrationAnswer, type RegistrationQuestion } from "@/config/registration";
 
 const CATEGORIES = ["Technical", "Gaming", "Creative", "Cultural", "Quiz", "Competition", "Fun Activity", "Other"];
 
@@ -26,6 +27,9 @@ interface HostEvent {
   preferredTime: string;
   additionalInfo: string;
   registrationsClosed: boolean;
+  registrationQuestions: RegistrationQuestion[];
+  teamMinSize: number;
+  teamMaxSize: number;
 }
 
 interface Participant {
@@ -33,6 +37,11 @@ interface Participant {
   participantName: string;
   participantEmail: string;
   participantPhone: string;
+  enrollmentNo?: string;
+  department?: string;
+  year?: string;
+  teamName?: string;
+  answers?: RegistrationAnswer[];
   teamMembers: { name: string; enrollmentNo: string }[];
   additionalNote: string;
   createdAt: string;
@@ -78,8 +87,9 @@ export default function ManagePage() {
       return;
     }
     const data = await res.json();
-    setEvent(data.event);
-    setForm(data.event);
+    const ev = { ...data.event, registrationQuestions: data.event.registrationQuestions ?? [], teamMinSize: data.event.teamMinSize ?? 1, teamMaxSize: data.event.teamMaxSize ?? 1 };
+    setEvent(ev);
+    setForm(ev);
     setPeople(data.registrations);
     setState("ready");
   }, [id, key]);
@@ -106,16 +116,38 @@ export default function ManagePage() {
     setForm((f) => (f ? { ...f, [field]: value } : f));
   }
 
+  function setQuestions(fn: (qs: RegistrationQuestion[]) => RegistrationQuestion[]) {
+    setForm((f) => (f ? { ...f, registrationQuestions: fn(f.registrationQuestions) } : f));
+  }
+
+  function addQuestion() {
+    setQuestions((qs) => [...qs, { id: `q${Date.now().toString(36)}`, label: "", type: "text", required: false, options: [] }]);
+  }
+
+  function patchQuestion(i: number, patch: Partial<RegistrationQuestion>) {
+    setQuestions((qs) => qs.map((q, idx) => (idx === i ? { ...q, ...patch } : q)));
+  }
+
+  function moveQuestion(i: number, dir: -1 | 1) {
+    setQuestions((qs) => {
+      const j = i + dir;
+      if (j < 0 || j >= qs.length) return qs;
+      const next = [...qs];
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
+  }
+
   async function save(e: React.FormEvent) {
     e.preventDefault();
     if (!form || !key) return;
     setSaving(true);
     setMsg(null);
-    const { proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants, maxParticipants, duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed } = form;
+    const { proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants, maxParticipants, duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed, registrationQuestions, teamMinSize, teamMaxSize } = form;
     const res = await fetch(`/api/host/events/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json", "x-manage-key": key },
-      body: JSON.stringify({ proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants: Number(expectedParticipants), maxParticipants: Number(maxParticipants), duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed }),
+      body: JSON.stringify({ proposerName, proposerEmail, proposerPhone, title, category, description, rules, expectedParticipants: Number(expectedParticipants), maxParticipants: Number(maxParticipants), duration, venueRequirements, equipmentRequirements, preferredDate, preferredTime, additionalInfo, registrationsClosed, registrationQuestions, teamMinSize: Number(teamMinSize), teamMaxSize: Number(teamMaxSize) }),
     });
     const data = await res.json().catch(() => ({}));
     setSaving(false);
@@ -136,13 +168,20 @@ export default function ManagePage() {
 
   function exportCsv() {
     const cell = (v: string) => `"${v.replace(/"/g, '""')}"`;
+    // One column per question label seen in the answers (covers questions edited or removed later).
+    const labels = [...new Set(people.flatMap((p) => (p.answers ?? []).map((a) => a.label)))];
     const rows = [
-      ["Name", "Email", "Phone", "Team members", "Note", "Registered"],
+      ["Name", "Email", "Phone", "Enrollment no.", "Department / Course", "Year", "Team name", "Team members", ...labels, "Note", "Registered"],
       ...people.map((p) => [
         p.participantName,
         p.participantEmail,
         p.participantPhone,
+        p.enrollmentNo ?? "",
+        p.department ?? "",
+        p.year ?? "",
+        p.teamName ?? "",
         p.teamMembers.map((m) => (m.enrollmentNo ? `${m.name} (${m.enrollmentNo})` : m.name)).join("; "),
+        ...labels.map((l) => (p.answers ?? []).find((a) => a.label === l)?.value ?? ""),
         p.additionalNote,
         new Date(p.createdAt).toLocaleString(),
       ]),
@@ -259,6 +298,60 @@ export default function ManagePage() {
           <textarea rows={3} className="input-glass" value={form.additionalInfo} onChange={(e) => set("additionalInfo", e.target.value)} />
         </div>
 
+        <h2 className="font-display pt-2 text-xl font-semibold text-ink">Registration form</h2>
+        <p className="text-sm text-ink/70">
+          Participants always give name, email, phone, enrollment number, department and year. Add your own questions below.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={lbl}>Minimum team size (1 = solo allowed)</label>
+            <input type="number" min={1} max={LIMITS.maxTeam} className="input-glass" value={form.teamMinSize} onChange={(e) => set("teamMinSize", Number(e.target.value))} />
+          </div>
+          <div>
+            <label className={lbl}>Maximum team size (1 = individual event)</label>
+            <input type="number" min={1} max={LIMITS.maxTeam} className="input-glass" value={form.teamMaxSize} onChange={(e) => set("teamMaxSize", Number(e.target.value))} />
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {form.registrationQuestions.map((q, i) => (
+            <div key={q.id} className="space-y-3 rounded-md border border-ink/10 bg-white/60 p-4">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="sm:col-span-2">
+                  <label className={lbl}>Question {i + 1}</label>
+                  <input className="input-glass" maxLength={LIMITS.label} value={q.label} onChange={(e) => patchQuestion(i, { label: e.target.value })} placeholder="e.g. What is your in-game ID?" />
+                </div>
+                <div>
+                  <label className={lbl}>Answer type</label>
+                  <select className="input-glass" value={q.type} onChange={(e) => patchQuestion(i, { type: e.target.value as QuestionType })}>
+                    {QUESTION_TYPES.map((t) => <option key={t} value={t}>{QUESTION_TYPE_LABELS[t]}</option>)}
+                  </select>
+                </div>
+              </div>
+              {(q.type === "select" || q.type === "checkbox") && (
+                <div>
+                  <label className={lbl}>Options (one per line, at least 2)</label>
+                  <textarea rows={3} className="input-glass" value={q.options.join("\n")} onChange={(e) => patchQuestion(i, { options: e.target.value.split("\n") })} />
+                </div>
+              )}
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <label className="flex items-center gap-2 text-sm text-ink/80">
+                  <input type="checkbox" checked={q.required} onChange={(e) => patchQuestion(i, { required: e.target.checked })} />
+                  Required
+                </label>
+                <div className="flex gap-2">
+                  <button type="button" onClick={() => moveQuestion(i, -1)} disabled={i === 0} className="btn btn-glass btn-sm">Up</button>
+                  <button type="button" onClick={() => moveQuestion(i, 1)} disabled={i === form.registrationQuestions.length - 1} className="btn btn-glass btn-sm">Down</button>
+                  <button type="button" onClick={() => setQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="btn btn-danger btn-sm">Remove</button>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button type="button" onClick={addQuestion} disabled={form.registrationQuestions.length >= LIMITS.questions} className="btn btn-glass btn-sm">
+            + Add question
+          </button>
+        </div>
+
         <h2 className="font-display pt-2 text-xl font-semibold text-ink">Your contact details</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
@@ -305,9 +398,20 @@ export default function ManagePage() {
                   <div className="min-w-0">
                     <p className="font-medium text-ink">{p.participantName}</p>
                     <p className="break-all text-sm text-ink/70">{p.participantEmail} · {p.participantPhone}</p>
+                    {(p.enrollmentNo || p.department || p.year) && (
+                      <p className="text-sm text-ink/70">
+                        {[p.enrollmentNo, p.department, p.year].filter(Boolean).join(" · ")}
+                      </p>
+                    )}
+                    {p.teamName && <p className="text-sm text-ink/70">Team: <span className="font-medium text-ink">{p.teamName}</span></p>}
+                    {(p.answers ?? []).map((a) => (
+                      <p key={a.questionId} className="mt-1 text-sm text-ink/70">
+                        <span className="text-ink/55">{a.label}:</span> {a.value}
+                      </p>
+                    ))}
                     {p.teamMembers.length > 0 && (
                       <p className="mt-1 text-sm text-ink/70">
-                        Team: {p.teamMembers.map((m) => (m.enrollmentNo ? `${m.name} (${m.enrollmentNo})` : m.name)).join(", ")}
+                        Members: {p.teamMembers.map((m) => (m.enrollmentNo ? `${m.name} (${m.enrollmentNo})` : m.name)).join(", ")}
                       </p>
                     )}
                     {p.additionalNote && <p className="mt-1 text-sm text-ink/70">Note: {p.additionalNote}</p>}

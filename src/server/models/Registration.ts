@@ -1,4 +1,5 @@
 import mongoose, { Schema, models, model } from "mongoose";
+import type { RegistrationAnswer } from "@/config/registration";
 
 export interface ITeamMember {
   name: string;
@@ -11,6 +12,11 @@ export interface IRegistration {
   participantName: string;
   participantEmail: string;
   participantPhone: string;
+  enrollmentNo?: string;
+  department?: string;
+  year?: string;
+  teamName?: string;
+  answers: RegistrationAnswer[];
   teamRequired: boolean;
   teamMembers: ITeamMember[];
   additionalNote: string;
@@ -24,6 +30,15 @@ const RegistrationSchema = new Schema<IRegistration>(
     participantName: { type: String, required: true, trim: true },
     participantEmail: { type: String, required: true, trim: true, lowercase: true },
     participantPhone: { type: String, required: true, trim: true },
+    // Optional at schema level so registrations made before these fields existed stay valid; the API requires them.
+    enrollmentNo: { type: String, trim: true, uppercase: true },
+    department: { type: String, trim: true },
+    year: { type: String, trim: true },
+    teamName: { type: String, trim: true },
+    answers: {
+      type: [{ _id: false, questionId: String, label: String, value: String }],
+      default: [],
+    },
     teamRequired: { type: Boolean, default: false },
     teamMembers: {
       type: [
@@ -37,6 +52,12 @@ const RegistrationSchema = new Schema<IRegistration>(
     additionalNote: { type: String, default: "" },
   },
   { timestamps: true }
+);
+
+// One registration per enrollment number per event (only for registrations that have one)
+RegistrationSchema.index(
+  { event: 1, enrollmentNo: 1 },
+  { unique: true, partialFilterExpression: { enrollmentNo: { $type: "string" } } }
 );
 
 // Prevent duplicate registrations for the same email + event
