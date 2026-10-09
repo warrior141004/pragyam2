@@ -187,7 +187,7 @@ export default function RegisterForm({
             <div key={q.id}>
               <label className={labelClass}>
                 {q.label}
-                {q.required ? <span className="text-orange"> *</span> : <span className="text-ink/50"> (optional)</span>}
+                {q.required ? <span className="text-orange"> *</span> : <span className="text-ink/70"> (optional)</span>}
               </label>
 
               {q.type === "textarea" ? (

@@ -59,20 +59,32 @@ function ground(x: number) {
 
 function Figure({ x, scale, pose, flip }: { x: number; scale: number; pose: number; flip: boolean }) {
   const y = ground(x);
+  // Every pose has two clearly separated arms, each ending in a hand.
   const arms =
     pose === 0
       ? "M-10 -46 L-22 -74 M10 -46 L22 -74"
       : pose === 1
-        ? "M-10 -46 L-26 -30 M10 -46 L26 -66 L26 -108"
+        ? "M-10 -46 L-27 -64 M10 -46 L26 -66 L26 -108"
         : pose === 2
-          ? "M-10 -46 L-24 -22 M10 -46 L24 -22"
-          : "M-10 -46 L-20 -70 M10 -46 L14 -18";
+          ? "M-10 -46 L-26 -26 M10 -46 L26 -26"
+          : "M-10 -46 L-22 -72 M10 -46 L25 -30";
+  const hands =
+    pose === 0
+      ? [[-22, -74], [22, -74]]
+      : pose === 1
+        ? [[-27, -64], [26, -108]]
+        : pose === 2
+          ? [[-26, -26], [26, -26]]
+          : [[-22, -72], [25, -30]];
   return (
     <g transform={`translate(${x} ${y}) scale(${flip ? -scale : scale} ${scale})`} fill="#3a2213" stroke="#3a2213">
       <circle cx="0" cy="-62" r="9" stroke="none" />
       <path d="M-11 -50 h22 l4 30 h-30 z" stroke="none" />
       <path d="M-9 -20 L-14 8 M9 -20 L14 8" strokeWidth="7" strokeLinecap="round" fill="none" />
       <path d={arms} strokeWidth="6" strokeLinecap="round" fill="none" />
+      {hands.map(([hx, hy]) => (
+        <circle key={`${hx}${hy}`} cx={hx} cy={hy} r="4.5" stroke="none" />
+      ))}
       {pose === 1 && <path d="M26 -108 l22 8 l-22 8 z" stroke="none" fill="#f28c28" />}
     </g>
   );

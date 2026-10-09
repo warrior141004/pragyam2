@@ -11,12 +11,12 @@ export default function EventCard({ event }: { event: EventDTO; index?: number }
       href={`/events/${event._id}`}
       className="glass-strong group flex flex-col overflow-hidden rounded-md transition-transform duration-300 hover:-translate-y-1.5"
     >
-      <CategoryArt category={event.category} seed={event._id} className="h-40" />
+      <CategoryArt category={event.category} seed={event._id} title={event.title} description={event.description} className="h-40" />
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center justify-between gap-3">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-orange">{event.category}</p>
-          <span className={`flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] ${full ? "text-ink/50" : "text-teal"}`}>
+          <span className={`flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] ${full ? "text-ink/70" : "text-teal"}`}>
             <i className={`dot bg-current ${full ? "" : "animate-pulse"}`} />
             {full ? "Full" : "Open"}
           </span>
@@ -26,12 +26,12 @@ export default function EventCard({ event }: { event: EventDTO; index?: number }
 
         <div className="mt-auto pt-5">
           <div className="flex items-end justify-between gap-3 text-xs">
-            <span className="text-ink/60">
+            <span className="text-ink/70">
               Hosted by <span className="font-semibold text-ink">{event.proposerName}</span>
             </span>
             <span className="font-bold text-ink">
               {event.approvedCount}
-              <span className="text-ink/50"> / {event.maxParticipants}</span>
+              <span className="text-ink/70"> / {event.maxParticipants}</span>
             </span>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-sm bg-ink/10">

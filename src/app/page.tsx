@@ -4,7 +4,7 @@ import HeroArt from "@/components/home/HeroArt";
 import Countdown from "@/components/home/Countdown";
 import LatestEvents from "@/components/home/LatestEvents";
 import { WaveRule, SectionTitle, Silhouettes } from "@/components/home/Decor";
-import { SectionEdge, Doodle } from "@/components/home/Vector";
+import { SectionEdge } from "@/components/home/Vector";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import { EVENT } from "@/config/event";
 
@@ -22,9 +22,6 @@ export default function Home() {
           height={420}
           className="pointer-events-none absolute -left-28 top-6 hidden w-[380px] opacity-[0.07] md:block"
         />
-        <Doodle kind="gear" size={110} className="spin-slow right-[6%] top-16 hidden md:block" />
-        <Doodle kind="chip" size={80} className="float-y left-[8%] bottom-14 hidden md:block" style={{ "--t": "7s" } as React.CSSProperties} />
-        <Doodle kind="cloud" size={90} className="float-y right-[14%] bottom-10 hidden lg:block" style={{ "--t": "9s", "--d": "-4s" } as React.CSSProperties} />
 
         <div className="relative mx-auto max-w-3xl px-5 pb-20 pt-20 text-center">
           <ScrollReveal>
@@ -62,8 +59,6 @@ export default function Home() {
 
       <section className="section-paper relative px-5 py-16 sm:py-20">
         <SectionEdge shape="zigzag" fill="#3a2213" />
-        <Doodle kind="satellite" size={96} className="float-y left-[5%] top-24 hidden lg:block" style={{ "--t": "8s" } as React.CSSProperties} />
-        <Doodle kind="dome" size={84} className="float-y right-[5%] bottom-16 hidden lg:block" style={{ "--t": "6s", "--d": "-2s" } as React.CSSProperties} />
         <ScrollReveal>
           <SectionTitle>Latest events</SectionTitle>
         </ScrollReveal>
@@ -77,14 +72,12 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      <section className="relative bg-orange px-5 pb-20 pt-20 text-center text-white">
+      <section className="relative overflow-hidden bg-orange px-5 pb-20 pt-20 text-center text-ink">
         <SectionEdge shape="wave" fill="#efe6d8" />
-        <Doodle kind="kite" size={90} className="float-y left-[7%] top-12 hidden md:block" style={{ "--t": "8s", "--d": "-3s" } as React.CSSProperties} />
-        <Doodle kind="kite" size={70} className="float-y right-[8%] top-20 hidden md:block" style={{ "--t": "10s" } as React.CSSProperties} />
         <ScrollReveal>
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-white/85">For students, by students</p>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-ink/80">For students, by students</p>
           <h2 className="font-display mt-3 text-4xl sm:text-6xl">Have an idea? Host your event</h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-white/90 sm:text-base">
+          <p className="mx-auto mt-4 max-w-xl text-sm text-ink/85 sm:text-base">
             A quiz, a hackathon, a game night, a design jam — pitch it in a few minutes. Organizers review it and you get an
             email the moment it&apos;s approved.
           </p>

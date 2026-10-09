@@ -88,7 +88,7 @@ export default function IntroPreloader() {
         <p data-stagger className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-ink opacity-0">
           Loading <span ref={pctRef}>0</span>%
         </p>
-        <p data-stagger className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink/55 opacity-0">
+        <p data-stagger className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink/70 opacity-0">
           {EVENT.dateShort} · CURAJ
         </p>
       </div>

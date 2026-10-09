@@ -43,7 +43,7 @@ export default function LatestEvents() {
           href={`/events/${e._id}`}
           className="glass-strong group flex flex-col overflow-hidden rounded-md transition-transform hover:-translate-y-1.5"
         >
-          <CategoryArt category={e.category} seed={e._id} className="h-40" />
+          <CategoryArt category={e.category} seed={e._id} title={e.title} description={e.description} className="h-40" />
           <div className="p-5">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-orange">{e.category}</p>
             <h3 className="font-display mt-2 text-xl leading-tight text-ink">{e.title}</h3>

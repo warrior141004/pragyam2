@@ -1,0 +1,9 @@
+# Never upload local secrets; production values live in Vercel's Environment Variables.
+.env
+.env.*
+!.env.local.example
+
+# Local build output and tooling
+.next
+node_modules
+tsconfig.tsbuildinfo

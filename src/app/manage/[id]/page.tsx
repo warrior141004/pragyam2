@@ -387,7 +387,7 @@ export default function ManagePage() {
       <section className="glass glass-sheen mt-8 rounded-md p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="font-display text-xl font-semibold text-ink">
-            Participants <span className="text-ink/60">({people.length} / {event.maxParticipants})</span>
+            Participants <span className="text-ink/70">({people.length} / {event.maxParticipants})</span>
           </h2>
           <button onClick={exportCsv} disabled={people.length === 0} className="btn btn-glass btn-sm">
             Download CSV
@@ -399,7 +399,7 @@ export default function ManagePage() {
         ) : (
           <div className="mt-4 space-y-3">
             {people.map((p) => (
-              <div key={p._id} className="rounded-md border border-ink/10 bg-white/60 p-4">
+              <div key={p._id} className="rounded-md border border-ink/10 bg-white/5 p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="font-medium text-ink">{p.participantName}</p>
@@ -412,7 +412,7 @@ export default function ManagePage() {
                     {p.teamName && <p className="text-sm text-ink/70">Team: <span className="font-medium text-ink">{p.teamName}</span></p>}
                     {(p.answers ?? []).map((a) => (
                       <p key={a.questionId} className="mt-1 text-sm text-ink/70">
-                        <span className="text-ink/55">{a.label}:</span> {a.value}
+                        <span className="text-ink/70">{a.label}:</span> {a.value}
                       </p>
                     ))}
                     {p.teamMembers.length > 0 && (

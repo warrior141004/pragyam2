@@ -120,7 +120,7 @@ export default function HostForm({ onDone }: { onDone: () => void }) {
 
       <div className="flex items-center justify-between rounded-md border border-teal/40 bg-[#f0faf6] px-4 py-3 text-xs">
         <span className="font-extrabold uppercase tracking-[0.14em] text-teal">CS department · verified</span>
-        <button type="button" onClick={() => setFromCs(null)} className="font-semibold text-ink/60 underline underline-offset-4 hover:text-ink">
+        <button type="button" onClick={() => setFromCs(null)} className="font-semibold text-ink/70 underline underline-offset-4 hover:text-ink">
           Change
         </button>
       </div>
@@ -135,7 +135,7 @@ export default function HostForm({ onDone }: { onDone: () => void }) {
           </Field>
           <Field label="Phone number">
             <input required type="tel" className="input-glass" value={form.proposerPhone} onChange={(e) => update("proposerPhone", e.target.value)} />
-            <p className="mt-1.5 text-xs text-ink/60">
+            <p className="mt-1.5 text-xs text-ink/70">
               Once your event is approved, your name and phone number appear on the public Contact page so participants can reach you. You can hide them later from your manage link.
             </p>
           </Field>
