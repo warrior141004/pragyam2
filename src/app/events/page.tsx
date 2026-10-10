@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import EventCard from "@/components/events/EventCard";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import Link from "next/link";
+import EventCard, { EventCardSkeleton } from "@/components/events/EventCard";
 import PageHeader from "@/components/shared/PageHeader";
 import type { EventDTO } from "@/types";
 
@@ -10,6 +11,17 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
+  // Category filter runs on the loaded list in the browser; the search request is unchanged.
+  const [category, setCategory] = useState<string | null>(null);
+
+  const categories = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const e of events) counts.set(e.category, (counts.get(e.category) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  }, [events]);
+  // A new search can remove the selected category entirely; fall back to "All" rather than an empty grid.
+  const active = category && categories.some(([c]) => c === category) ? category : null;
+  const shown = active ? events.filter((e) => e.category === active) : events;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -71,28 +83,58 @@ export default function EventsPage() {
         </label>
       </div>
 
+      {!loading && !error && categories.length > 1 && (
+        <div className="filter-row mt-6" role="group" aria-label="Filter by category">
+          <button type="button" onClick={() => setCategory(null)} className={`chip ${active === null ? "chip-active" : ""}`} aria-pressed={active === null}>
+            All <span className="chip-count">{events.length}</span>
+          </button>
+          {categories.map(([cat, n]) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setCategory(active === cat ? null : cat)}
+              className={`chip ${active === cat ? "chip-active" : ""}`}
+              aria-pressed={active === cat}
+            >
+              {cat} <span className="chip-count">{n}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="mt-8">
         {loading ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="glass h-64 animate-pulse rounded-md" />
+              <EventCardSkeleton key={i} />
             ))}
           </div>
         ) : error ? (
           <p className="alert-error">{error}</p>
-        ) : events.length === 0 ? (
-          <div className="glass glass-sheen rounded-md p-10 text-center">
-            <p className="font-display text-xl font-semibold text-ink">Nothing here yet</p>
-            <p className="mt-2 text-sm text-ink/76">
-              No approved events match your search. Try another keyword or check back soon.
+        ) : shown.length === 0 ? (
+          <div className="glass-strong mx-auto max-w-lg rounded-md p-10 text-center">
+            <p className="font-display text-2xl text-ink">Nothing here yet</p>
+            <p className="mt-2 text-sm text-ink/70">
+              {search ? "No approved events match your search. Try another keyword." : "No approved events yet — check back soon."}
             </p>
+            <Link href="/host" className="btn btn-orange mt-6">
+              Host the first one
+            </Link>
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {events.map((e, i) => (
-              <EventCard key={e._id} event={e} index={i} />
-            ))}
-          </div>
+          <>
+            <p className="mb-5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-ink/70" aria-live="polite">
+              {shown.length} event{shown.length === 1 ? "" : "s"}
+              {active ? ` in ${active}` : ""}
+              {search ? ` matching “${search}”` : ""}
+            </p>
+            {/* key forces the stagger to replay when the filter changes */}
+            <div key={active ?? "all"} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {shown.map((e, i) => (
+                <EventCard key={e._id} event={e} index={i} />
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>

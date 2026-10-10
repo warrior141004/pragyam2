@@ -14,7 +14,6 @@ export default function Home() {
       <HeroArt />
 
       <section className="section-cream relative overflow-hidden">
-        <SectionEdge shape="scallop" fill="#2b1e14" />
         <Image
           src="/images/pragyam-logo-dark.png"
           alt=""
@@ -23,10 +22,10 @@ export default function Home() {
           className="pointer-events-none absolute -left-28 top-6 hidden w-[380px] opacity-[0.07] md:block"
         />
 
-        <div className="relative mx-auto max-w-3xl px-5 pb-20 pt-20 text-center">
+        <div className="relative mx-auto max-w-3xl px-5 py-16 text-center lg:py-24">
           <ScrollReveal>
             <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-ink">
-              {EVENT.name} is coming soon.{" "}
+              {EVENT.name} lands on {EVENT.dateLabel}.{" "}
               <Link href="/host" className="text-orange underline underline-offset-4">
                 Host an event
               </Link>{" "}
@@ -44,11 +43,11 @@ export default function Home() {
             </div>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/host" className="btn btn-orange">
-                Add to the build-up — host
-              </Link>
-              <Link href="/events" className="btn btn-primary">
+              <Link href="/events" className="btn btn-orange">
                 See what&apos;s on
+              </Link>
+              <Link href="/host" className="btn btn-white">
+                Add to the build-up — host
               </Link>
             </div>
           </ScrollReveal>
@@ -57,8 +56,8 @@ export default function Home() {
 
       <Silhouettes />
 
-      <section className="section-paper relative px-5 py-16 sm:py-20">
-        <SectionEdge shape="zigzag" fill="#3a2213" />
+      <section className="section-paper relative px-5 py-16 lg:py-24">
+        <SectionEdge shape="zigzag" fill="#0d0d0d" />
         <ScrollReveal>
           <SectionTitle>Latest events</SectionTitle>
         </ScrollReveal>
@@ -66,18 +65,18 @@ export default function Home() {
           <LatestEvents />
         </ScrollReveal>
         <ScrollReveal delay={0.15} className="mt-12 text-center">
-          <Link href="/events" className="btn btn-primary">
+          <Link href="/events" className="btn btn-orange">
             See all events
           </Link>
         </ScrollReveal>
       </section>
 
-      <section className="relative overflow-hidden bg-orange px-5 pb-20 pt-20 text-center text-ink">
-        <SectionEdge shape="wave" fill="#efe6d8" />
+      <section className="relative overflow-hidden bg-orange px-5 py-16 text-center text-white lg:py-24">
+        <SectionEdge shape="wave" fill="#f4f4f4" />
         <ScrollReveal>
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-ink/80">For students, by students</p>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-white/85">For students, by students</p>
           <h2 className="font-display mt-3 text-4xl sm:text-6xl">Have an idea? Host your event</h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-ink/85 sm:text-base">
+          <p className="mx-auto mt-4 max-w-xl text-sm text-white/90 sm:text-base">
             A quiz, a hackathon, a game night, a design jam — pitch it in a few minutes. Organizers review it and you get an
             email the moment it&apos;s approved.
           </p>

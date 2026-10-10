@@ -118,8 +118,8 @@ export default function HostForm({ onDone }: { onDone: () => void }) {
     <form onSubmit={handleSubmit} className="animate-fade-up space-y-5">
       {error && <p className="alert-error">{error}</p>}
 
-      <div className="flex items-center justify-between rounded-md border border-teal/40 bg-[#f0faf6] px-4 py-3 text-xs">
-        <span className="font-extrabold uppercase tracking-[0.14em] text-teal">CS department · verified</span>
+      <div className="flex items-center justify-between rounded-md border border-teal/40 bg-[#f7f7f7] px-4 py-3 text-xs">
+        <span className="font-extrabold uppercase tracking-[0.14em] text-teal-deep">CS department · verified</span>
         <button type="button" onClick={() => setFromCs(null)} className="font-semibold text-ink/70 underline underline-offset-4 hover:text-ink">
           Change
         </button>

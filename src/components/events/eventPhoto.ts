@@ -2,6 +2,23 @@
 export type Photo = [id: string, alt: string];
 
 const PHOTOS = {
+  treasure: [
+    ["1470506926202-05d3fca84c9a", "Hands holding an old treasure map marked with a red X"],
+    ["1743715033222-412b6e6613db", "Magnifying glass and compass on a vintage map"],
+    ["1488375634201-b85b28653a79", "Compass resting on an old map"],
+    ["1473163928189-364b2c4e1135", "Old maps spread out on the floor"],
+  ],
+  // made for this one event: a prompt being typed melting into trophies, with a "/imagine" prompt bar between
+  promptPrize: [["/images/prompt-prize.webp", "A prompt being typed on a laptop, fading into a row of trophies"]],
+  aiCreate: [
+    ["1518972559570-7cc1309f3229", "Glowing audio mixing console"],
+    ["1677442136019-21780ecad995", "3D \"AI\" lettering on a dark digital backdrop"],
+    ["1574717024653-61fd2cf4d44d", "Video editing timeline on a dark screen"],
+    ["1490810194309-344b3661ba39", "Creator editing video with headphones in a dark room"],
+    ["1636690581110-a512fed05fd3", "AI-generated abstract art in blue and red"],
+    ["1614963326505-843868e1d83a", "Video editing software with a timeline and preview"],
+  ],
+
   rangoli: [
     ["1700993714468-408700d3599e", "Hand drawing a colourful sand rangoli"],
     ["1635192592106-77a5aacbe1a3", "Flower rangoli lit with diyas"],
@@ -93,6 +110,10 @@ export type Pool = keyof typeof PHOTOS;
  */
 const RULES: [RegExp, Pool][] = [
   [/rangoli/i, "rangoli"],
+  [/prompt\s*(&|and)\s*prize/i, "promptPrize"],
+  [/treasure[- ]?hunt|scavenger|\bclues?\b/i, "treasure"],
+  // AI creative contests (photo / video / music made with AI) — before "music" can send them to the dance photos
+  [/prompt\s*(&|and)\s*prize|ai[- ]generated (photo|image|video|music|art)|text[- ]to[- ](image|video)|midjourney/i, "aiCreate"],
   [/\bskits?\b|drama|theatre|theater|nukkad|\bmime\b|\bacting\b|\bactors?\b/i, "skit"],
   // before "cyber": hackathon write-ups often mention security tracks
   [/hackathon|hackforge/i, "coding"],
@@ -136,5 +157,7 @@ export function pickPhoto(category: string, seed: string, title = "", descriptio
   return list[hash(seed) % list.length];
 }
 
+/** Photos that live in /public are used as they are; Unsplash ids get a resized, cropped URL. */
 export const photoSrc = (id: string, w: number) =>
+  id.startsWith("/") ? id :
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${Math.round(w * 0.5)}&q=70`;

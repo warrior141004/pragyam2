@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-const INK = "#2b1e14";
+const INK = "#0d0d0d";
 
 type EdgeShape = "scallop" | "zigzag" | "wave";
 
@@ -51,7 +51,7 @@ function Shape({ kind }: { kind: DoodleKind }) {
           <path
             d="M32 6l4 6 7-2 2 7 7 2-2 7 6 4-6 4 2 7-7 2-2 7-7-2-4 6-4-6-7 2-2-7-7-2 2-7-6-4 6-4-2-7 7-2 2-7 7 2z"
             {...stroke}
-            fill="#ffc632"
+            fill="#ffffff"
           />
           <circle cx="32" cy="32" r="9" {...stroke} fill="#fff" />
         </g>
@@ -59,7 +59,7 @@ function Shape({ kind }: { kind: DoodleKind }) {
     case "chip":
       return (
         <g>
-          <rect x="18" y="18" width="28" height="28" rx="4" {...stroke} fill="#3fb99a" />
+          <rect x="18" y="18" width="28" height="28" rx="4" {...stroke} fill="#ffffff" />
           <rect x="26" y="26" width="12" height="12" {...stroke} fill="#fff" />
           <path d="M24 18V9M32 18V9M40 18V9M24 46v9M32 46v9M40 46v9M18 24H9M18 32H9M18 40H9M46 24h9M46 32h9M46 40h9" {...stroke} />
         </g>
@@ -67,10 +67,10 @@ function Shape({ kind }: { kind: DoodleKind }) {
     case "satellite":
       return (
         <g>
-          <rect x="26" y="26" width="12" height="12" transform="rotate(45 32 32)" {...stroke} fill="#ff3d8e" />
+          <rect x="26" y="26" width="12" height="12" transform="rotate(45 32 32)" {...stroke} fill="#e23744" />
           <path d="M10 18l12 12M42 34l12 12" {...stroke} />
-          <rect x="2" y="6" width="16" height="10" transform="rotate(45 10 11)" {...stroke} fill="#3ee0ff" />
-          <rect x="46" y="48" width="16" height="10" transform="rotate(45 54 53)" {...stroke} fill="#3ee0ff" />
+          <rect x="2" y="6" width="16" height="10" transform="rotate(45 10 11)" {...stroke} fill="#ffffff" />
+          <rect x="46" y="48" width="16" height="10" transform="rotate(45 54 53)" {...stroke} fill="#ffffff" />
           <path d="M38 26c5-5 12-5 17 0" {...stroke} />
           <path d="M42 22c7-7 16-7 23 0" {...stroke} strokeOpacity="0.5" />
         </g>
@@ -78,20 +78,20 @@ function Shape({ kind }: { kind: DoodleKind }) {
     case "dome":
       return (
         <g>
-          <path d="M10 40a22 22 0 0 1 44 0z" {...stroke} fill="#f28c28" />
+          <path d="M10 40a22 22 0 0 1 44 0z" {...stroke} fill="#d90429" />
           <rect x="6" y="40" width="52" height="8" {...stroke} fill="#fff" />
           <path d="M32 18v-9" {...stroke} />
-          <circle cx="32" cy="7" r="3" {...stroke} fill="#ff3d8e" />
+          <circle cx="32" cy="7" r="3" {...stroke} fill="#e23744" />
           <path d="M14 48v10M50 48v10M22 48v10M42 48v10" {...stroke} />
         </g>
       );
     case "bolt":
-      return <path d="M36 4L14 36h16l-4 24 24-34H34z" {...stroke} fill="#ffc632" />;
+      return <path d="M36 4L14 36h16l-4 24 24-34H34z" {...stroke} fill="#d90429" />;
     case "kite":
       return (
         <g>
-          <path d="M32 4l20 22-20 30-20-30z" {...stroke} fill="#ff3d8e" />
-          <path d="M32 4v52M12 26h40" {...stroke} strokeOpacity="0.6" />
+          <path d="M32 4l20 22-20 30-20-30z" {...stroke} fill="#0d0d0d" />
+          <path d="M32 4v52M12 26h40" {...stroke} stroke="#ffffff" strokeOpacity="0.55" strokeWidth={1.6} />
           <path d="M32 56q8 6-2 12" {...stroke} />
         </g>
       );

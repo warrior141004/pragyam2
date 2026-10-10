@@ -84,7 +84,7 @@ function Pulse() {
       {tiles.map((t) => (
         <div key={t.label} className={`glass ${t.tint} rounded-md px-3 py-4 sm:px-5 sm:py-5`}>
           <p className="font-display text-3xl leading-none text-ink sm:text-4xl">{stats ? t.n : "–"}</p>
-          <p className="mt-2 text-[9px] font-extrabold uppercase tracking-[0.16em] text-ink/70 sm:text-[10px]">{t.label}</p>
+          <p className="mt-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-ink/70">{t.label}</p>
         </div>
       ))}
     </div>
@@ -161,7 +161,7 @@ export default function Countdown({ target, since }: { target?: string | null; s
       )}
 
       {!down && parts && (
-        <p className="mt-6 text-[11px] font-extrabold uppercase tracking-[0.2em] text-teal">{milestone(parts.d)}</p>
+        <p className="mt-6 text-[11px] font-extrabold uppercase tracking-[0.2em] text-teal-deep">{milestone(parts.d)}</p>
       )}
 
       <Pulse />

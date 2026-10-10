@@ -3,6 +3,7 @@
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import RegisterForm from "@/components/events/RegisterForm";
+import CategoryArt from "@/components/events/CategoryArt";
 import type { EventDTO } from "@/types";
 
 export default function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -62,7 +63,16 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
       </Link>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-5">
-        <article className="glass glass-sheen animate-fade-up rounded-md p-7 sm:p-10 lg:col-span-3">
+        <article className="glass glass-sheen animate-fade-up overflow-hidden rounded-md lg:col-span-3">
+          {/* same photo as the event's card, so the two read as one thing */}
+          <CategoryArt
+            category={event.category}
+            seed={event._id}
+            title={event.title}
+            description={event.description}
+            className="h-52 sm:h-72"
+          />
+          <div className="p-7 sm:p-10">
           <div className="flex flex-wrap items-center gap-3">
             <span className="chip chip-active">{event.category}</span>
             <span className="text-sm text-ink/70">
@@ -75,11 +85,11 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             )}
           </div>
 
-          <h1 className="font-display mt-6 text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-5xl">
+          <h1 className="font-display mt-6 text-4xl leading-[1.0] text-ink sm:text-6xl">
             {event.title}
           </h1>
 
-          <p className="mt-7 whitespace-pre-wrap text-base leading-relaxed text-ink/72">{event.description}</p>
+          <p className="mt-7 max-w-[65ch] whitespace-pre-wrap text-[17px] leading-relaxed text-ink/80">{event.description}</p>
 
           {event.rules && (
             <>
@@ -87,9 +97,10 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               <h2 className="font-display text-lg font-semibold text-ink">
                 Rules <span className="font-display text-ink/66">&amp; format</span>
               </h2>
-              <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-ink/68">{event.rules}</p>
+              <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-ink/70">{event.rules}</p>
             </>
           )}
+          </div>
         </article>
 
         <aside className="animate-fade-up lg:col-span-2 lg:sticky lg:top-28 lg:self-start">
@@ -110,9 +121,9 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                 <span className="text-base font-normal text-ink/76"> / {event.maxParticipants}</span>
               </p>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-md bg-ink/5">
+            <div className="mt-2 h-2 overflow-hidden rounded-md bg-ink/10">
               <div
-                className={`h-full rounded-md ${full ? "bg-ink/20" : "bg-gradient-to-r from-orange to-amber-400"}`}
+                className={`h-full rounded-md ${full ? "bg-ink/20" : "bg-orange"}`}
                 style={{ width: `${pct}%` }}
               />
             </div>
@@ -120,7 +131,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             <div className="mt-7">
               {done ? (
                 <div className="rounded-md border border-teal/40 bg-teal/10 p-5">
-                  <p className="font-display text-lg font-semibold text-teal">You&apos;re registered</p>
+                  <p className="font-display text-2xl text-teal-deep">You&apos;re registered</p>
                   <p className="mt-1.5 text-sm text-ink/70">
                     The host has been notified. Keep an eye on your inbox for details closer to the day.
                   </p>

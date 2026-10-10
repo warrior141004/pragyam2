@@ -36,7 +36,7 @@ export default function HostPage() {
                 Submitted
               </span>
               <p className="font-display mt-6 text-3xl font-bold text-ink">
-                Proposal <span className="font-display text-teal">received.</span>
+                Proposal <span className="font-display text-teal-deep">received.</span>
               </p>
               <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-ink/70">
                 It&apos;s with the Pragyam 2.0 team now. Once it&apos;s approved we&apos;ll email you a private manage link: it&apos;s the only way to edit your event and manage participants, so keep it safe.

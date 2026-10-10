@@ -33,7 +33,18 @@ export default function SmoothScroll() {
     const observer = new MutationObserver(sync);
     observer.observe(html, { attributes: true, attributeFilter: ["class"] });
 
+    // Scroll-scrubbed reveals measure positions up front; when content loads later (event grids,
+    // photos) the page grows, so re-measure — debounced so a burst of changes costs one refresh.
+    let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+    const resize = new ResizeObserver(() => {
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 200);
+    });
+    resize.observe(document.body);
+
     return () => {
+      resize.disconnect();
+      clearTimeout(refreshTimer);
       observer.disconnect();
       gsap.ticker.remove(tick);
       lenis.destroy();

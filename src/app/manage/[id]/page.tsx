@@ -236,7 +236,7 @@ export default function ManagePage() {
       </div>
       <h1 className="font-display mt-4 text-3xl font-bold text-ink sm:text-4xl">Manage: {event.title}</h1>
 
-      {msg && <p className={`mt-4 ${msg.ok ? "rounded-md border border-teal/40 bg-teal/10 px-4 py-3 text-sm text-teal" : "alert-error"}`}>{msg.text}</p>}
+      {msg && <p className={`mt-4 ${msg.ok ? "rounded-md border border-teal/40 bg-teal/10 px-4 py-3 text-sm text-teal-deep" : "alert-error"}`}>{msg.text}</p>}
 
       <form onSubmit={save} className="glass glass-sheen mt-8 space-y-4 rounded-md p-6 sm:p-8">
         <h2 className="font-display text-xl font-semibold text-ink">Event details</h2>

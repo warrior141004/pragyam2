@@ -1,5 +1,5 @@
-const MARIGOLD = "#ffc632";
-const LIGHT_COLORS = [MARIGOLD, "#f28c28", "#3fb99a", "#fbeed9", "#c8552a"];
+const MARIGOLD = "#ffffff";
+const LIGHT_COLORS = [MARIGOLD, "#d90429", "#ffffff", "#ffffff", "#e23744"];
 
 /** Jaipur-style skyline: battlements, towers with chhatris, a tiered haveli with arch windows. */
 const SKYLINE = (() => {
@@ -40,8 +40,8 @@ const SKYLINE = (() => {
 
 export default function Skyline({
   className = "",
-  fill = "#2b1e14",
-  fillTop = "#4a2a18",
+  fill = "#0d0d0d",
+  fillTop = "#1f1f1f",
   lights = true,
   id = "fort",
 }: {
@@ -78,7 +78,7 @@ export default function Skyline({
       ))}
       {lights && (
         <>
-          <path d="M0 132 Q720 128 1440 132" fill="none" stroke="#f6c343" strokeOpacity="0.6" strokeWidth="1" />
+          <path d="M0 132 Q720 128 1440 132" fill="none" stroke="#ffffff" strokeOpacity="0.6" strokeWidth="1" />
           {/* five phase groups instead of one animation per bulb */}
           {LIGHT_COLORS.map((color, phase) => (
             <g key={color} className="twinkle" style={{ "--d": `${-phase * 0.5}s` } as React.CSSProperties}>

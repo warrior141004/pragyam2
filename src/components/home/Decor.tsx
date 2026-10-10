@@ -77,7 +77,7 @@ function Figure({ x, scale, pose, flip }: { x: number; scale: number; pose: numb
           ? [[-26, -26], [26, -26]]
           : [[-22, -72], [25, -30]];
   return (
-    <g transform={`translate(${x} ${y}) scale(${flip ? -scale : scale} ${scale})`} fill="#3a2213" stroke="#3a2213">
+    <g transform={`translate(${x} ${y}) scale(${flip ? -scale : scale} ${scale})`} fill="#0d0d0d" stroke="#0d0d0d">
       <circle cx="0" cy="-62" r="9" stroke="none" />
       <path d="M-11 -50 h22 l4 30 h-30 z" stroke="none" />
       <path d="M-9 -20 L-14 8 M9 -20 L14 8" strokeWidth="7" strokeLinecap="round" fill="none" />
@@ -85,18 +85,18 @@ function Figure({ x, scale, pose, flip }: { x: number; scale: number; pose: numb
       {hands.map(([hx, hy]) => (
         <circle key={`${hx}${hy}`} cx={hx} cy={hy} r="4.5" stroke="none" />
       ))}
-      {pose === 1 && <path d="M26 -108 l22 8 l-22 8 z" stroke="none" fill="#f28c28" />}
+      {pose === 1 && <path d="M26 -108 l22 8 l-22 8 z" stroke="none" fill="#d90429" />}
     </g>
   );
 }
 
 export function Silhouettes() {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-[#f7e2c4] via-[#f6d9b2] to-[#f0caa0]">
+    <div className="relative overflow-hidden bg-gradient-to-b from-[#ffffff] via-[#fbe3e6] to-[#f4b8c0]">
       <svg viewBox="0 0 1440 220" className="block h-40 w-full sm:h-56" preserveAspectRatio="none" aria-hidden>
         <path
           d="M0 178 C 220 150, 420 205, 640 172 S 1060 148, 1240 176 S 1400 168, 1440 170 L1440 220 L0 220 Z"
-          fill="#3a2213"
+          fill="#0d0d0d"
         />
         {FIGURES.map((f) => (
           <Figure key={f.x} {...f} />

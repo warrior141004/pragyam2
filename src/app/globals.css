@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #2b1e14;
-  --color-orange: #f28c28;
-  --color-teal: #3fb99a;
-  --color-cream: #fbf1e3;
-  --color-sand: #f3dcbb;
-  --color-paper: #efe6d8;
-  --color-indigo: #150c3f;
-  --color-rani: #ff3d8e;
-  --color-marigold: #ffc632;
+  --color-ink: #0d0d0d;
+  --color-orange: #d90429; /* Zaydn red: the action colour */
+  --color-teal: #ffffff; /* yellow: the secondary pop */
+  --color-teal-deep: #0d0d0d; /* teal for text on light surfaces */
+  --color-cream: #fafafa;
+  --color-sand: #ffffff;
+  --color-paper: #f4f4f4; /* deeper cream for alternate bands */
+  --color-indigo: #0d0d0d;
+  --color-rani: #e23744;
+  --color-marigold: #ffffff;
 }
 
 @theme inline {
@@ -23,21 +24,34 @@
   color-scheme: light;
 
   /* Brand palette — same values as the @theme tokens above, for use in plain CSS. */
-  --ink: #2b1e14;
-  --cream: #fbf1e3;
-  --orange: #f28c28;
-  --teal: #3fb99a;
-  --marigold: #ffc632;
-  --rani: #ff3d8e;
+  --ink: #0d0d0d;
+  --cream: #fafafa;
+  --orange: #d90429;
+  --teal: #ffffff;
+  --red-text: #c4021f; /* red for small text on light surfaces */
+  --red-on-dark: #ff5a6a; /* red for text on black */
+  --teal-deep: #0d0d0d;
+  --gold-deep: #0d0d0d; /* olive gold: accent text on light surfaces (≥ 5:1) */
+  --marigold: #ffffff;
+  --rani: #e23744;
+
+  /* Motion — one easing family, one timing (DESIGN.md §6) */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-state: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-instant: 120ms;
+  --dur-fast: 180ms;
+  --dur-base: 330ms;
+  --dur-slow: 500ms;
 }
 
 * {
-  scrollbar-color: var(--orange) #efe6d8;
+  scrollbar-color: var(--orange) #f4f4f4;
   scrollbar-width: thin;
 }
 
 html {
-  background: #fff;
+  background: #fafafa;
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
 }
@@ -67,20 +81,20 @@ html.lenis body {
 }
 
 body {
-  background: #fff;
+  background: #fafafa;
   color: var(--ink);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: rgba(242, 140, 40, 0.3);
+  background: rgba(217, 4, 41, 0.3);
 }
 
 .site {
   min-height: 100vh;
   width: 100%;
-  background: #fff;
+  background: #fafafa;
   display: flex;
   flex-direction: column;
 }
@@ -106,26 +120,26 @@ input[type="checkbox"] {
 /* ---------- Surfaces (flat vector style) ---------- */
 
 .section-cream {
-  background-color: #fbeed9;
+  background-color: #ffffff;
   /* the hero's dot grid, carried over faintly so the two bands read as one surface */
-  background-image: radial-gradient(rgba(43, 30, 20, 0.08) 1.4px, transparent 1.6px);
+  background-image: radial-gradient(rgba(13, 13, 13, 0.08) 1.4px, transparent 1.6px);
   background-size: 30px 30px;
 }
 
 .section-paper {
-  background-color: #efe6d8;
+  background-color: #f4f4f4;
   background-image: var(--noise);
   background-size: 180px 180px;
 }
 
 .glass {
-  background: #fff;
+  background: #ffffff;
   border: 2px solid var(--ink);
   box-shadow: 6px 6px 0 var(--ink);
 }
 
 .glass-strong {
-  background: #fff;
+  background: #ffffff;
   border: 2px solid var(--ink);
   box-shadow: 8px 8px 0 var(--orange);
 }
@@ -134,11 +148,11 @@ input[type="checkbox"] {
   position: relative;
 }
 
-.tint-cyan { background-color: #eefaf6; }
-.tint-violet { background-color: #fff3e2; }
-.tint-pink { background-color: #ffeef2; }
-.tint-amber { background-color: #fff7dc; }
-.tint-emerald { background-color: #ecf9f3; }
+.tint-cyan { background-color: #f7f7f7; }
+.tint-violet { background-color: #fafafa; }
+.tint-pink { background-color: #fdeef0; }
+.tint-amber { background-color: #ffffff; }
+.tint-emerald { background-color: #fafafa; }
 
 .hairline {
   height: 2px;
@@ -164,7 +178,8 @@ input[type="checkbox"] {
   cursor: pointer;
   border: 2px solid var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, color 0.2s ease;
+  transition: transform var(--dur-fast) var(--ease-state), box-shadow var(--dur-fast) var(--ease-state),
+    background-color var(--dur-base) var(--ease-state), color var(--dur-base) var(--ease-state);
 }
 
 .btn:hover:not(:disabled) {
@@ -173,6 +188,7 @@ input[type="checkbox"] {
 }
 
 .btn:active:not(:disabled) {
+  transition-duration: var(--dur-instant);
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--ink);
 }
@@ -183,12 +199,13 @@ input[type="checkbox"] {
   transform: none !important;
 }
 
-.btn-primary { background: var(--teal); color: var(--ink); }
-.btn-orange { background: var(--orange); color: var(--ink); }
-.btn-glass { background: #fff; color: var(--ink); }
+.btn-primary { background: var(--orange); color: #fff; }
+.btn-teal { background: var(--teal); color: var(--ink); }
+.btn-orange { background: var(--orange); color: #fff; }
+.btn-glass { background: #ffffff; color: var(--ink); }
 .btn-glass:hover:not(:disabled) { background: var(--cream); }
-.btn-white { background: #fff; color: var(--ink); }
-.btn-white:hover:not(:disabled) { background: #fff3d1; }
+.btn-white { background: #ffffff; color: var(--ink); }
+.btn-white:hover:not(:disabled) { background: #ffffff; }
 
 .btn-sm {
   padding: 0.65rem 1.1rem;
@@ -202,8 +219,8 @@ input[type="checkbox"] {
   color: #b42323;
 }
 .btn-success {
-  background: #e6f7f2;
-  color: #167a60;
+  background: #ffffff;
+  color: #0d0d0d;
 }
 
 .input-glass {
@@ -212,13 +229,13 @@ input[type="checkbox"] {
   padding: 0.8rem 0.95rem;
   font-size: 0.9rem;
   color: var(--ink);
-  background: #fff;
+  background: #ffffff;
   border: 2px solid var(--ink);
   outline: none;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition: box-shadow var(--dur-fast) var(--ease-state), transform var(--dur-fast) var(--ease-state);
 }
 .input-glass::placeholder {
-  color: rgba(43, 30, 20, 0.4);
+  color: rgba(13, 13, 13, 0.4);
 }
 .input-glass:focus {
   box-shadow: 4px 4px 0 var(--orange);
@@ -239,7 +256,8 @@ input[type="checkbox"] {
   background: var(--cream);
   border: 2px solid var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, color 0.2s ease;
+  transition: transform var(--dur-fast) var(--ease-state), box-shadow var(--dur-fast) var(--ease-state),
+    background-color var(--dur-base) var(--ease-state), color var(--dur-base) var(--ease-state);
 }
 button.chip:hover {
   transform: translate(-1px, -1px);
@@ -247,7 +265,7 @@ button.chip:hover {
 }
 .chip-active {
   background: var(--orange);
-  color: var(--ink);
+  color: #fff;
 }
 
 .dot {
@@ -290,23 +308,23 @@ button.chip:hover {
 }
 
 .frost-nav-full {
-  background: rgba(30, 7, 0, 0.94);
-  border: 1px solid rgba(255, 154, 74, 0.35);
-  box-shadow: 0 8px 30px -10px rgba(255, 90, 20, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 10, 0.94);
+  border: 1px solid rgba(217, 4, 41, 0.35);
+  box-shadow: 0 8px 30px -10px rgba(217, 4, 41, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .frost-nav-compact {
-  background: rgba(30, 7, 0, 0.96);
-  border: 1px solid rgba(255, 154, 74, 0.5);
+  background: rgba(10, 10, 10, 0.96);
+  border: 1px solid rgba(217, 4, 41, 0.5);
   backdrop-filter: blur(26px) saturate(180%);
   -webkit-backdrop-filter: blur(26px) saturate(180%);
-  box-shadow: 0 12px 36px -10px rgba(255, 90, 20, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 36px -10px rgba(217, 4, 41, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .frost-menu {
-  background: rgba(24, 6, 0, 0.96);
-  border: 1px solid rgba(255, 154, 74, 0.4) !important;
-  box-shadow: 0 16px 40px -10px rgba(255, 90, 20, 0.5);
+  background: rgba(5, 5, 5, 0.96);
+  border: 1px solid rgba(217, 4, 41, 0.4) !important;
+  box-shadow: 0 16px 40px -10px rgba(217, 4, 41, 0.5);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
@@ -317,9 +335,9 @@ button.chip:hover {
   font-family: var(--font-anton), Impact, sans-serif;
   font-size: clamp(2.6rem, 8vw, 5rem);
   line-height: 1;
-  color: var(--orange);
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
-  text-shadow: 3px 3px 0 var(--ink);
+  text-shadow: 3px 3px 0 var(--orange);
 }
 
 @keyframes digit-pop {
@@ -404,17 +422,85 @@ button.chip:hover {
 html.has-intro .intro { display: block; }
 html.has-intro body { overflow: hidden; }
 
-.intro-panel {
+/* the overlay stays up while its bars open, after `has-intro` is lifted */
+.intro.is-playing { display: block; }
+
+.intro-bar {
   position: absolute;
   left: 0;
   right: 0;
-  height: 50%;
-  background-color: var(--cream);
-  background-image: var(--noise);
-  background-size: 180px 180px;
+  height: 50.5%; /* a hair over half, so no seam shows in the middle */
+  background: #050505;
 }
-.intro-top { top: 0; border-bottom: 3px solid var(--ink); }
-.intro-bottom { bottom: 0; }
+.intro-bar-top { top: 0; }
+.intro-bar-bottom { bottom: 0; }
+
+.intro-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;
+  text-align: center;
+  color: var(--cream);
+}
+.intro-logo { width: clamp(72px, 9vw, 112px); opacity: 0; }
+.intro-logo img { width: 100%; height: auto; }
+.intro-name {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 1.6rem;
+  font-size: clamp(3.4rem, 11vw, 8.5rem);
+  line-height: 0.95;
+  white-space: nowrap;
+  color: var(--cream);
+  opacity: 0; /* revealed by the intro timeline, which also positions each letter */
+}
+/* each letter rises out of its own mask */
+.intro-mask { display: inline-block; overflow: hidden; padding-bottom: 0.04em; }
+.intro-char { display: inline-block; }
+.intro-ver {
+  display: inline-block;
+  margin-left: 0.25em;
+  padding: 0.35em 0.6em;
+  border-radius: 6px;
+  font-size: 0.24em;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: var(--orange);
+  opacity: 0;
+}
+.intro-rule {
+  width: min(240px, 50vw);
+  height: 2px;
+  margin-top: 1.8rem;
+  background: rgba(250, 250, 250, 0.12);
+}
+.intro-rule-fill { height: 100%; background: var(--orange); transform: scaleX(0); transform-origin: left center; }
+.intro-meta {
+  margin-top: 1.1rem;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cream);
+  opacity: 0;
+}
+.intro-skip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 28px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.35);
+}
 
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(24px); }
@@ -429,57 +515,48 @@ html.has-intro body { overflow: hidden; }
   position: fixed;
   inset: 0;
   z-index: 90;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(40% 40% at 50% 50%, rgba(242, 140, 40, 0.4), transparent 70%),
-    var(--ink);
-  clip-path: circle(0% at 50% 50%);
   visibility: hidden;
   pointer-events: none;
 }
-
-.pt-sun {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 200px;
-  height: 200px;
+.pt-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.5%;
+  background: #050505;
+  transform: scaleY(0);
 }
-
-.pt-disc {
-  display: grid;
-  place-items: center;
-  width: 128px;
-  height: 128px;
-  border-radius: 50%;
-  background: var(--marigold);
-  border: 3px solid var(--ink);
-  box-shadow: 6px 6px 0 #ff7a1a;
-}
-
-.pt-ring {
+.pt-bar-top { top: 0; transform-origin: top center; }
+.pt-bar-bottom { bottom: 0; transform-origin: bottom center; }
+.pt-card {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  border: 2px dashed rgba(255, 198, 50, 0.85);
-  animation: spin-slow 14s linear infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  opacity: 0;
 }
-
-.pt-ring-b {
-  inset: -26px;
-  border: 2px dotted rgba(63, 185, 154, 0.9);
-  animation-direction: reverse;
-  animation-duration: 20s;
+.pt-mark { width: 56px; height: 56px; }
+.pt-label-mask { display: block; overflow: hidden; padding: 0 0.2em 0.06em; }
+.pt-label {
+  display: block;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  line-height: 1;
+  color: var(--cream);
+  white-space: nowrap;
 }
 
 @keyframes page-enter {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+  /* scale + opacity only: a full-page blur is too heavy on low-end phones */
+  from { opacity: 0; transform: scale(1.025); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .page-enter {
-  animation: page-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: 50% 30%;
+  animation: page-enter 0.9s var(--ease-out) both;
 }
 
 .hero-in {
@@ -487,7 +564,7 @@ html.has-intro body { overflow: hidden; }
   transform: translateY(26px);
 }
 html:not(.has-intro) .hero-in {
-  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: fade-up 0.9s var(--ease-out) forwards;
   animation-delay: var(--d, 0s);
 }
 
@@ -500,7 +577,7 @@ html:not(.has-intro) .hero-in {
   .twinkle, .float-y, .spin-slow, .digit-pop, .animate-fade-up {
     animation: none !important;
   }
-  .hero-in, .reveal, .page-enter, .hero-copy {
+  .hero-in, .reveal, .page-enter, .hero-copy, .intro-char {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
@@ -524,7 +601,7 @@ html:not(.has-intro) .hero-in {
   padding-bottom: 5.25rem;
 }
 .hx-dots {
-  background-image: radial-gradient(rgba(251, 241, 227, 0.14) 1.4px, transparent 1.6px);
+  background-image: radial-gradient(rgba(250, 250, 250, 0.14) 1.4px, transparent 1.6px);
   background-size: 30px 30px;
   mask-image: radial-gradient(75% 80% at 65% 45%, #000 15%, transparent 80%);
 }
@@ -539,28 +616,6 @@ html:not(.has-intro) .hero-in {
   .hx-stage { max-width: 340px; margin-top: 8px; }
 }
 
-/* the teal sun behind the figure */
-.hx-disc {
-  position: absolute;
-  left: 4%;
-  right: 4%;
-  top: 10%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--teal);
-  border: 4px solid var(--cream);
-  box-shadow: 12px 12px 0 var(--orange);
-}
-.hx-orbit {
-  position: absolute;
-  left: -4%;
-  right: -4%;
-  top: 2%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 3px dashed rgba(255, 198, 50, 0.65);
-}
-
 .hx-figure-wrap {
   inset: 0 -4% -14% -4%;
   overflow: hidden;
@@ -572,7 +627,7 @@ html:not(.has-intro) .hero-in {
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
-  filter: drop-shadow(0 6px 10px rgba(43, 30, 20, 0.35));
+  filter: drop-shadow(0 6px 10px rgba(13, 13, 13, 0.35));
   /* Fully opaque, clipped to the disc: everything above the disc's centre line may pop out,
      everything below it is cut along the circle so the body sits inside the sun. */
   -webkit-mask-image: linear-gradient(#000, #000), radial-gradient(ellipse 42.6% 32.3% at 50% 41%, #000 99.5%, transparent 100%);
@@ -637,7 +692,7 @@ html:not(.has-intro) .hero-in {
   color: var(--ink);
   background: var(--marigold);
   border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--cream);
+  box-shadow: 3px 3px 0 var(--orange);
 }
 @keyframes hx-pulse { 50% { opacity: 0.45; } }
 
@@ -658,8 +713,8 @@ html:not(.has-intro) .hero-in {
   letter-spacing: 0.06em;
   padding: 0.4em 0.7em;
   border-radius: 6px;
-  color: var(--ink);
-  background: var(--marigold);
+  color: #fff;
+  background: var(--orange);
   border: 3px solid var(--cream);
   box-shadow: 4px 4px 0 var(--orange);
   text-shadow: none;
@@ -672,20 +727,22 @@ html:not(.has-intro) .hero-in {
   text-transform: uppercase;
   color: var(--cream);
 }
-.hx-tag .t-gold { color: var(--marigold); }
-.hx-tag .t-teal { color: var(--teal); }
+.hx-tag .t-gold { color: var(--red-on-dark); }
+.hx-tag .t-teal { color: var(--red-on-dark); }
 .hx-note {
   font-size: 0.66rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(251, 241, 227, 0.6);
+  color: rgba(250, 250, 250, 0.6);
 }
 
 /* the site's buttons, with a cream shadow so they read on the ink band */
 .hx .btn { box-shadow: 4px 4px 0 var(--cream); }
 .hx .btn:hover:not(:disabled) { box-shadow: 6px 6px 0 var(--cream); }
 .hx .btn:active:not(:disabled) { box-shadow: 2px 2px 0 var(--cream); }
+.hx .btn-white { background: var(--cream); }
+.hx .btn-white:hover:not(:disabled) { background: #f2f2f2; }
 
 /* track ticker, sits on the bottom edge where the scallop begins */
 .hx-marquee {
@@ -695,7 +752,7 @@ html:not(.has-intro) .hero-in {
   overflow: hidden;
   background: var(--orange);
   border-top: 3px solid var(--cream);
-  color: var(--ink);
+  color: #fff;
 }
 .hx-marquee-track {
   display: flex;
@@ -712,7 +769,7 @@ html:not(.has-intro) .hero-in {
 }
 .hx-marquee b {
   font-size: 0.9rem;
-  color: var(--cream);
+  color: var(--ink);
 }
 @keyframes hx-marquee { to { transform: translateX(-50%); } }
 
@@ -721,6 +778,14 @@ html:not(.has-intro) .hero-in {
 }
 
 /* ---------- Footer motion ---------- */
+
+/* doodles in the footer's orange band: clouds drift across, a little sun bobs */
+.ft-cloud {
+  left: 0;
+  animation: ft-drift var(--t, 44s) linear infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes ft-drift { from { transform: translateX(-14vw); } to { transform: translateX(112vw); } }
 
 .ft-logo { animation: ft-wiggle 3.2s ease-in-out infinite; transform-origin: 50% 80%; }
 @keyframes ft-wiggle {
@@ -736,12 +801,8 @@ html:not(.has-intro) .hero-in {
 .ft-heart { display: inline-block; color: var(--rani); animation: ft-beat 1.4s ease-in-out infinite; }
 @keyframes ft-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.35); } 30% { transform: scale(1); } 45% { transform: scale(1.2); } }
 
-/* the teal sun gently breathes */
-.hx-disc { animation: hx-breathe 6s ease-in-out infinite alternate; }
-@keyframes hx-breathe { from { transform: scale(1); } to { transform: scale(1.025); } }
-
 @media (prefers-reduced-motion: reduce) {
-  .ft-logo, .ft-heart, .hx-disc { animation: none !important; }
+  .ft-logo, .ft-heart, .ft-cloud { animation: none !important; }
   .ft-link:hover { transform: none; }
 }
 
@@ -755,13 +816,14 @@ p, li { text-wrap: pretty; }
 
 /* Keyboard users get a clear ring; mouse clicks don't show it. */
 :where(a, button, summary, [tabindex]):focus-visible {
-  outline: 3px solid var(--orange);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
   border-radius: 6px;
 }
 .hx :where(a, button):focus-visible,
-footer :where(a, button):focus-visible {
-  outline-color: var(--marigold);
+footer :where(a, button):focus-visible,
+[data-slot="resizable-navbar"] :where(a, button):focus-visible {
+  outline-color: var(--teal);
 }
 /* inputs already lift with an orange shadow on focus; keep that and skip the ring */
 .input-glass:focus-visible { outline: none; }
@@ -774,7 +836,7 @@ footer :where(a, button):focus-visible {
 .input-glass:disabled {
   opacity: 0.55;
   cursor: not-allowed;
-  background: #f4ede3;
+  background: #f3f3f3;
 }
 input[type="checkbox"]:disabled { cursor: not-allowed; opacity: 0.55; }
 
@@ -789,7 +851,293 @@ input[type="checkbox"]:disabled { cursor: not-allowed; opacity: 0.55; }
 
 @media (max-width: 400px) {
   .hx-title { font-size: 3.4rem; }
-  .hx-tag { font-size: 1.05rem; }
-  .hx .btn { padding: 0.85rem 1.2rem; }
-  .hx-stage { max-width: 300px; }
 }
+
+/* ---------- Event photos fade in on load (DESIGN.md §6.4) ---------- */
+
+.photo-fade { filter: saturate(0.92) contrast(1.04); opacity: 0; transition: opacity 300ms var(--ease-state), transform var(--dur-slow) var(--ease-out); }
+.photo-fade.is-loaded { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-fade { transition: none; }
+}
+
+/* ---------- Event cards, filters and loading states ---------- */
+
+/* cards arrive in a short stagger (capped so long lists don't wait) */
+@keyframes card-in { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: 0 0; } }
+.card-in { animation: card-in 0.7s var(--ease-out) calc(min(var(--i, 0), 8) * 70ms) both; }
+
+.event-card { transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.event-card:hover { transform: translateY(-6px); box-shadow: 10px 12px 0 var(--orange); }
+.event-card .card-go { transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-state), color var(--dur-base) var(--ease-state); }
+.event-card:hover .card-go { transform: translateX(4px); background: var(--orange); color: #fff; }
+
+/* status sticker on the photo */
+.card-status {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.card-status-open .dot { background: var(--ink); }
+.card-status-few { background: var(--orange); color: #fff; }
+.card-status-full { background: #ececec; color: rgba(13, 13, 13, 0.75); }
+
+/* category filter row: scrolls sideways on phones instead of wrapping into a wall */
+.filter-row {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding: 2px 4px 8px 2px;
+  scrollbar-width: none;
+}
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-row .chip { flex: none; }
+.chip-count { opacity: 0.6; font-variant-numeric: tabular-nums; }
+
+/* skeletons shimmer instead of blinking */
+.skeleton {
+  background: linear-gradient(100deg, rgba(13, 13, 13, 0.06) 30%, rgba(13, 13, 13, 0.11) 50%, rgba(13, 13, 13, 0.06) 70%);
+  background-size: 300% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .card-in, .skeleton { animation: none !important; }
+  .event-card:hover { transform: none; }
+}
+
+/* ---------- Accent text (Zaydn red + yellow) ---------- */
+/* On light surfaces: "orange" text is red (deeper for small text), and yellow ("teal"/"marigold") text
+   would be unreadable, so it falls back to ink. On dark surfaces: a lighter red, and the bright yellows. */
+.text-orange { color: var(--red-text); }
+.hover\:text-orange:hover { color: var(--red-text); }
+.text-teal,
+.text-marigold,
+.hover\:text-marigold:hover { color: var(--ink); }
+.font-display.text-orange,
+.font-display .text-orange { color: var(--orange); }
+
+:is(.hx, footer, .bg-ink, [data-slot="resizable-navbar"], .intro, .pt-overlay) .text-orange,
+:is(.hx, footer, .bg-ink, [data-slot="resizable-navbar"], .intro, .pt-overlay) .hover\:text-orange:hover { color: var(--red-on-dark); }
+:is(.hx, footer, .bg-ink, [data-slot="resizable-navbar"], .intro, .pt-overlay) .text-teal { color: var(--teal); }
+:is(.hx, footer, .bg-ink, [data-slot="resizable-navbar"], .intro, .pt-overlay) .text-marigold,
+:is(.hx, footer, .bg-ink, [data-slot="resizable-navbar"], .intro, .pt-overlay) .hover\:text-marigold:hover { color: var(--red-on-dark); }
+
+/* ---------- Hero: poster details + a halftone blend into the page below ---------- */
+
+.hx { padding-bottom: 0; }
+.hx-inner { padding-bottom: 3.75rem; }
+
+/* giant outlined watermark behind everything; drifts with the pointer */
+.hx-watermark {
+  position: absolute;
+  left: -1vw;
+  bottom: 7rem;
+  z-index: 0;
+  font-size: clamp(8rem, 24vw, 22rem);
+  line-height: 0.8;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.1);
+  translate: calc(var(--mx, 0) * -40px) calc(var(--sy, 0) * -50px);
+  pointer-events: none;
+  user-select: none;
+}
+/* a small editorial caption running up the left edge */
+.hx-vertical {
+  position: absolute;
+  left: 18px;
+  top: 52%;
+  z-index: 2;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+/* tagline as slapped-on stickers */
+.hx-stickers { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.hx-sticker {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  border: 2px solid var(--cream);
+  border-radius: 999px;
+  font-size: clamp(0.9rem, 1.7vw, 1.15rem);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: rotate var(--dur-base) var(--ease-out), scale var(--dur-base) var(--ease-out);
+}
+.hx-sticker:hover { rotate: 0deg; scale: 1.06; }
+.hx-sticker-white { background: #fff; color: var(--ink); border-color: var(--ink); box-shadow: 3px 3px 0 var(--orange); rotate: -3deg; }
+.hx-sticker-red { background: var(--orange); color: #fff; box-shadow: 3px 3px 0 #fff; rotate: 2deg; }
+.hx-sticker-outline { background: transparent; color: #fff; border: 2px dashed rgba(255, 255, 255, 0.75); rotate: -1.5deg; }
+
+/* the marquee now sits in flow, and the hero dissolves into the page through a halftone fade */
+.hx-marquee { position: relative; inset: auto; }
+.hx-blend {
+  position: relative;
+  height: clamp(110px, 16vw, 190px);
+  /* ends on the first section's exact background, so there is no seam */
+  background: linear-gradient(to bottom, var(--ink) 0%, rgba(13, 13, 13, 0) 100%), #ffffff;
+}
+.hx-blend::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--ink) 2.6px, transparent 3.2px) 0 0 / 14px 14px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 40%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 40%, transparent 85%);
+}
+
+@media (max-width: 639px) {
+  .hx-watermark { bottom: 6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hx-watermark { translate: none; }
+}
+
+/* ---------- Hero figure: the TV-head portrait ---------- */
+
+/* The whole figure shows (arms and hands included), so the old "clip to the disc" mask is dropped.
+   The suit is near-black on a near-black hero, so it gets a thin white rim-light and a soft red glow
+   from the TV screen to lift it off the background. */
+.hx-figure {
+  -webkit-mask-image: none;
+  mask-image: none;
+  filter: drop-shadow(0 0 0.5px #fff) drop-shadow(0 0 2.5px rgba(255, 255, 255, 0.55)) drop-shadow(0 0 26px rgba(217, 4, 41, 0.32));
+}
+
+/* ---------- Hero aura: a god's halo behind the TV head ---------- */
+
+/* the stage becomes a size container, so every aura measurement is in % of the stage width (cqw) */
+.hx-stage { container-type: inline-size; }
+.hero-copy { position: relative; z-index: 3; }
+
+/* origin = the centre of the TV head. The figure is 108cqw wide starting at -4cqw, the TV is centred
+   at 53% of the image and 10.7% down it, and this layer starts at (-6cqw, -7.5cqw) of the stage. */
+.hx-aura {
+  position: absolute;
+  left: 59.1cqw;
+  top: 22.8cqw;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.hx-aura-glow,
+.hx-aura-rays,
+.hx-halo {
+  position: absolute;
+  border-radius: 50%;
+}
+.hx-aura-glow {
+  left: -62cqw;
+  top: -62cqw;
+  width: 124cqw;
+  height: 124cqw;
+  background:
+    radial-gradient(closest-side, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 32%),
+    radial-gradient(closest-side, rgba(217, 4, 41, 0.5) 0%, rgba(217, 4, 41, 0.24) 40%, rgba(217, 4, 41, 0.07) 70%, rgba(217, 4, 41, 0) 100%);
+  animation: hx-aura-breathe 5s ease-in-out infinite alternate;
+}
+@keyframes hx-aura-breathe { from { scale: 0.95; opacity: 0.85; } to { scale: 1.05; opacity: 1; } }
+
+/* slow god-rays, with a hole in the middle so they radiate out from behind the head */
+.hx-aura-rays {
+  left: -72cqw;
+  top: -72cqw;
+  width: 144cqw;
+  height: 144cqw;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.1) 0deg 3deg, transparent 3deg 12deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 0 24%, #000 34%, transparent 70%);
+  mask-image: radial-gradient(circle, transparent 0 24%, #000 34%, transparent 70%);
+  animation: spin-slow 140s linear infinite;
+}
+
+/* the rings; each is centred on the origin through its own --r */
+.hx-halo {
+  left: calc(var(--r) * -1);
+  top: calc(var(--r) * -1);
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+}
+.hx-halo-1 {
+  --r: 31cqw;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.55), 0 0 64px rgba(217, 4, 41, 0.55), inset 0 0 28px rgba(217, 4, 41, 0.5);
+  animation: hx-halo-pulse 4.5s ease-in-out infinite alternate;
+}
+@keyframes hx-halo-pulse { from { scale: 1; opacity: 0.8; } to { scale: 1.035; opacity: 1; } }
+.hx-halo-2 { --r: 38cqw; border: 2px dashed rgba(255, 255, 255, 0.6); animation: spin-slow 70s linear infinite; }
+.hx-halo-3 { --r: 47cqw; border: 3px dotted rgba(217, 4, 41, 0.9); animation: spin-slow 90s linear infinite reverse; }
+.hx-halo-4 { --r: 57cqw; border: 1px solid rgba(255, 255, 255, 0.16); }
+
+/* an orbiter swings its body round the origin; the body counter-rotates by the same amount, so chips stay upright */
+.hx-orbiter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  rotate: var(--a);
+  animation: spin-slow var(--t) linear infinite;
+}
+.hx-orbiter.is-rev { animation-direction: reverse; }
+.hx-orbiter-body {
+  position: absolute;
+  left: var(--r);
+  top: 0;
+  translate: -50% -50%;
+  rotate: calc(var(--a) * -1);
+  animation: spin-slow var(--t) linear infinite reverse;
+}
+.hx-orbiter.is-rev .hx-orbiter-body { animation-direction: normal; }
+.hx-aura .hx-chip { position: static; white-space: nowrap; }
+.hx-spark {
+  display: block;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 22px rgba(217, 4, 41, 0.9);
+}
+.hx-dotp {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 12px var(--orange), 0 0 2px #fff;
+}
+
+/* entrance: the aura blooms from the head once the intro has cleared */
+@keyframes hx-aura-in { from { opacity: 0; scale: 0.5; } to { opacity: 1; scale: 1; } }
+html.has-intro .hx-aura { opacity: 0; }
+html:not(.has-intro) .hx-aura { animation: hx-aura-in 1.5s var(--ease-out) 0.3s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hx-aura { animation: none !important; opacity: 1 !important; scale: 1 !important; }
+  .hx-aura-glow, .hx-aura-rays, .hx-halo, .hx-orbiter, .hx-orbiter-body { animation: none !important; }
+}
+

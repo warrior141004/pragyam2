@@ -30,8 +30,8 @@ export const metadata: Metadata = {
 };
 
 // Decides before first paint whether the intro curtain shows, so the page
-// never flashes underneath it. Runs once per browser session.
-const INTRO_SCRIPT = `(function(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(sessionStorage.getItem('pragyam_intro_shown'))return;sessionStorage.setItem('pragyam_intro_shown','1');document.documentElement.classList.add('has-intro');}catch(e){}})();`;
+// never flashes underneath it. Runs once per browser session; add ?intro=1 to the URL to replay it.
+const INTRO_SCRIPT = `(function(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var force=/[?&]intro=1(&|$)/.test(location.search);if(!force&&sessionStorage.getItem('pragyam_intro_shown'))return;sessionStorage.setItem('pragyam_intro_shown','1');document.documentElement.classList.add('has-intro');}catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
