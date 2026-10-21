@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Skyline from "@/components/home/Skyline";
 import { Doodle, Stars } from "@/components/home/Vector";
-import { EVENT } from "@/config/event";
+import { EVENT, SPONSOR } from "@/config/event";
 
 const EXPLORE = [
   { href: "/", label: "Home" },
@@ -47,6 +47,25 @@ export default function Footer() {
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/70">
               A student-run tech fest themed around AI. Propose an event, get it approved, and watch the department show up.
             </p>
+
+            <div className="mt-7">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-marigold">Powered by</p>
+              <a
+                href={SPONSOR.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${SPONSOR.name} website`}
+                className="mt-3 inline-flex rounded-md border-2 border-white/80 bg-white px-3 py-2 shadow-[3px_3px_0_#d90429] transition-transform hover:-translate-y-0.5"
+              >
+                <Image
+                  src="/images/adhirohah_logo.webp"
+                  alt={SPONSOR.name}
+                  width={1024}
+                  height={276}
+                  className="h-8 w-auto"
+                />
+              </a>
+            </div>
           </div>
 
           <div className="md:col-span-3">

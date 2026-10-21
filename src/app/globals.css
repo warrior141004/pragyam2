@@ -812,6 +812,28 @@ html:not(.has-intro) .hx-sponsor-logo {
   animation: hx-sponsor-in 1.7s var(--ease-out) 1s both;
 }
 
+/* On phones the credit is a compact, slightly tilted sticker that keeps the copy column tidy;
+   the full-size lockup returns once there is room for it. */
+@media (max-width: 1023px) {
+  /* The halo is drawn around the figure and reaches ~34cqw above the stage. Give the stage that
+     much extra headroom on one-column layouts so the rings open *below* the copy — no text sits
+     on top of the image. The gap is filled by the halo itself. */
+  .hx-stage { margin-top: 7rem; }
+}
+@media (max-width: 639px) {
+  .hx-sponsor {
+    max-width: 100%;
+  }
+  .hx-sponsor-logo {
+    width: clamp(150px, 44vw, 190px);
+    max-width: 100%;
+    rotate: -2.5deg;
+  }
+}
+@media (min-width: 640px) {
+  .hx-sponsor-logo { rotate: 0deg; }
+}
+
 /* the site's buttons, with a cream shadow so they read on the ink band */
 .hx .btn { box-shadow: 4px 4px 0 var(--cream); }
 .hx .btn:hover:not(:disabled) { box-shadow: 6px 6px 0 var(--cream); }
