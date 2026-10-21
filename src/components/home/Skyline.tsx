@@ -81,7 +81,7 @@ export default function Skyline({
           <path d="M0 132 Q720 128 1440 132" fill="none" stroke="#ffffff" strokeOpacity="0.6" strokeWidth="1" />
           {/* five phase groups instead of one animation per bulb */}
           {LIGHT_COLORS.map((color, phase) => (
-            <g key={color} className="twinkle" style={{ "--d": `${-phase * 0.5}s` } as React.CSSProperties}>
+            <g key={phase} className="twinkle" style={{ "--d": `${-phase * 0.5}s` } as React.CSSProperties}>
               {SKYLINE.lights.filter((_, i) => i % LIGHT_COLORS.length === phase).map((x) => (
                 <circle key={x} cx={x} cy={131} r="3" fill={color} />
               ))}

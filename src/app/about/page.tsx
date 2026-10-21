@@ -1,5 +1,7 @@
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import PageHeader from "@/components/shared/PageHeader";
+import SponsorLogoReveal from "@/components/shared/SponsorLogoReveal";
+import { SPONSOR } from "@/config/event";
 
 const PILLARS = [
   { title: "Innovation", desc: "Space for bold, original ideas from every student.", tint: "tint-violet" },
@@ -60,6 +62,65 @@ export default function AboutPage() {
           </ScrollReveal>
         ))}
       </div>
+
+      <ScrollReveal delay={0.1} className="glass-strong glass-sheen mt-6 rounded-md p-8 sm:p-10">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.6fr)] lg:items-start">
+          <div>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.24em] text-orange">{SPONSOR.role}</p>
+            <SponsorLogoReveal />
+            <h2 className="font-display mt-5 text-2xl leading-tight text-ink sm:text-3xl">
+              {SPONSOR.name}
+            </h2>
+            <p className="mt-2 text-sm text-ink/60">
+              {SPONSOR.headquarters} · Est. {SPONSOR.founded} · {SPONSOR.experience} of experience
+            </p>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/70">
+              Sponsor of Pragyam 2.0, backing the student-led events that make up the fest.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {SPONSOR.services.map((service) => (
+                <span
+                  key={service}
+                  className="rounded-full border-2 border-ink/10 bg-white px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.08em] text-ink/65"
+                >
+                  {service}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-lg leading-relaxed text-ink/75">{SPONSOR.description}</p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <SponsorNote title="Vision" desc={SPONSOR.vision} />
+              <SponsorNote title="Mission" desc={SPONSOR.mission} />
+              <SponsorNote title="Values" desc={SPONSOR.values} />
+            </div>
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t-2 border-dashed border-ink/15 pt-5 text-sm font-semibold">
+              <a
+                href={SPONSOR.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-orange underline underline-offset-4 hover:text-ink"
+              >
+                adhirohah.in ↗
+              </a>
+              <a href={`mailto:${SPONSOR.email}`} className="text-ink/65 hover:text-ink">
+                {SPONSOR.email}
+              </a>
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  );
+}
+
+function SponsorNote({ title, desc }: { title: string; desc: string }) {
+  return (
+    <div className="rounded-md border-2 border-ink/10 bg-cream p-4">
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-orange">{title}</p>
+      <p className="mt-2 text-sm leading-relaxed text-ink/70">{desc}</p>
     </div>
   );
 }

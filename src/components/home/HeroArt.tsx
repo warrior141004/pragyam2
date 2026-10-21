@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { EVENT } from "@/config/event";
+import { EVENT, SPONSOR } from "@/config/event";
 import HeroParallax from "@/components/home/HeroParallax";
 import { Waves } from "@/components/home/Decor";
 
@@ -140,6 +140,18 @@ export default function HeroArt() {
           <p className="hero-in hx-note mt-6" style={delay(0.58)}>
             No account needed · Host or take part
           </p>
+
+          <a
+            href={SPONSOR.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${SPONSOR.credit} — ${SPONSOR.name}`}
+            className="hero-in hx-sponsor mt-6 inline-flex flex-col items-start gap-2"
+            style={delay(0.66)}
+          >
+            <span className="hx-sponsor-label">Powered by</span>
+            <span className="hx-sponsor-logo" aria-hidden />
+          </a>
         </div>
 
         {/* centrepiece */}

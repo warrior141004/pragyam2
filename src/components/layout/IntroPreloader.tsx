@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { EVENT } from "@/config/event";
+import { EVENT, SPONSOR } from "@/config/event";
 
 /**
  * Cinematic opening: black screen → the P mark pulls into focus → "PRAGYAM 2.0" rises letter by letter
@@ -24,6 +24,7 @@ export default function IntroPreloader() {
   const nameRef = useRef<HTMLParagraphElement>(null);
   const verRef = useRef<HTMLSpanElement>(null);
   const metaRef = useRef<HTMLParagraphElement>(null);
+  const sponsorRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
@@ -64,6 +65,7 @@ export default function IntroPreloader() {
       .fromTo(verRef.current, { opacity: 0, scale: 0.6, rotate: -14 }, { opacity: 1, scale: 1, rotate: -6, duration: 0.6, ease: "back.out(2)" }, 1.6)
       // 3. the credit line and a thin progress rule
       .fromTo(metaRef.current, { opacity: 0, letterSpacing: "0.6em" }, { opacity: 0.75, letterSpacing: "0.3em", duration: 1.1 }, 1.7)
+      .fromTo(sponsorRef.current, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7 }, 2)
       .fromTo(lineRef.current, { scaleX: 0 }, { scaleX: 1, duration: 1.8, ease: "power2.inOut" }, 0.9)
       // 4. the title blurs away…
       .to(stageRef.current, { opacity: 0, scale: 1.06, filter: "blur(10px)", duration: 0.6, ease: "power2.in" }, "+=0.45")
@@ -130,6 +132,13 @@ export default function IntroPreloader() {
         <p ref={metaRef} className="intro-meta">
           {EVENT.org} · CURAJ · {EVENT.dateShort}
         </p>
+
+        <div ref={sponsorRef} className="intro-sponsor">
+          <span className="intro-sponsor-label">Powered by</span>
+          <span className="intro-sponsor-badge">
+            <Image src="/images/adhirohah_logo.webp" alt={SPONSOR.name} width={1024} height={276} priority />
+          </span>
+        </div>
       </div>
 
       <p className="intro-skip">Tap to skip</p>

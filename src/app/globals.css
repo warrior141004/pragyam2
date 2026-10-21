@@ -489,6 +489,28 @@ html.has-intro body { overflow: hidden; }
   color: var(--cream);
   opacity: 0;
 }
+.intro-sponsor {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.4rem;
+  opacity: 0; /* revealed by the intro timeline */
+}
+.intro-sponsor-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.55);
+}
+.intro-sponsor-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0.32rem 0.5rem;
+}
+.intro-sponsor-badge img { height: clamp(18px, 2.4vw, 26px); width: auto; }
 .intro-skip {
   position: absolute;
   left: 0;
@@ -573,14 +595,20 @@ html:not(.has-intro) .hero-in {
   transform: translateY(28px);
 }
 
+/* the about-page sponsor mark waits for its scroll-triggered GSAP entrance */
+.sponsor-reveal {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .twinkle, .float-y, .spin-slow, .digit-pop, .animate-fade-up {
     animation: none !important;
   }
-  .hero-in, .reveal, .page-enter, .hero-copy, .intro-char {
+  .hero-in, .reveal, .page-enter, .hero-copy, .intro-char, .sponsor-reveal, .hx-sponsor-logo {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
+    clip-path: none !important;
   }
   .hero-layer {
     transform: none !important;
@@ -735,6 +763,53 @@ html:not(.has-intro) .hero-in {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(250, 250, 250, 0.6);
+}
+
+/* sponsor credit: the full-colour wordmark would fight the flat ink/cream/orange hero, so its
+   silhouette is masked out in the theme's cream and given the same soft red glow as the figure */
+.hx-sponsor { text-decoration: none; }
+.hx-sponsor-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.45);
+  transition: color var(--dur-base) var(--ease-state);
+}
+.hx-sponsor-logo {
+  display: inline-block;
+  width: clamp(200px, 26vw, 360px);
+  aspect-ratio: 1024 / 276;
+  background: var(--cream);
+  -webkit-mask: url("/images/adhirohah_logo.webp") center / contain no-repeat;
+  mask: url("/images/adhirohah_logo.webp") center / contain no-repeat;
+  opacity: 0.82;
+  filter: drop-shadow(0 0 7px rgba(217, 4, 41, 0.5));
+  transition: opacity var(--dur-base) var(--ease-state);
+}
+.hx-sponsor:hover .hx-sponsor-label { color: var(--cream); }
+.hx-sponsor:hover .hx-sponsor-logo { opacity: 1; }
+
+/* cinematic entrance: the wordmark wipes on from the left, settling out of a blur and a gentle
+   push-in. It waits for the intro curtain to lift, then takes its time. */
+@keyframes hx-sponsor-in {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(1.14);
+    clip-path: inset(0 100% 0 0);
+    filter: blur(12px) drop-shadow(0 0 7px rgba(217, 4, 41, 0));
+  }
+  55% { opacity: 1; }
+  100% {
+    opacity: 0.82;
+    transform: translateY(0) scale(1);
+    /* a little larger than the box so the red glow is not clipped at rest */
+    clip-path: inset(-20px -20px -20px -20px);
+    filter: blur(0) drop-shadow(0 0 7px rgba(217, 4, 41, 0.5));
+  }
+}
+html:not(.has-intro) .hx-sponsor-logo {
+  animation: hx-sponsor-in 1.7s var(--ease-out) 1s both;
 }
 
 /* the site's buttons, with a cream shadow so they read on the ink band */
